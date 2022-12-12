@@ -1,12 +1,17 @@
 MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 help:
+	@echo '---------- 環境構築に関するコマンド -----------'
+	@echo 'init                   -- プロジェクト初期のセットアップを行います※基本的にクローンしてきて1回目のみ実行'
+	@echo 'remake                 -- 環境を作り直します※dockerの構成等変更になったらこのコマンドを実行してください'
+	@echo ''
 	@echo "\033[1;34m---------- Dockerに関するコマンド ----------\033[0m"
 	@echo 'ps                     -- コンテナ一覧を表示します'
 	@echo 'build                  -- 全コンテナイメージをビルドします'
 	@echo 'up                     -- 全コンテナを作成後、コンテナを起動します'
 	@echo 'restart                -- 全コンテナを作り直した後起動します ※image、volumeは既存のものを再利用'
 	@echo 'down                   -- 全コンテナを削除します'
+	@echo 'destroy                -- コンテナ、ネットワーク、イメージ、ボリュームを削除します'
 	@echo ''
 	@echo "\033[1;34m---------- apiコンテナに関するコマンド ----------\033[0m"
 	@echo 'api-bash               -- apiコンテナに接続します'
@@ -33,6 +38,27 @@ help:
 	@echo 'gl                     -- Gitコミットログを確認'
 	@echo 'gl-ol                     -- Gitコミットログをワンラインで確認'
 
+init:
+	@make build
+	docker-compose exec api cp .env.example .env
+	docker-compose exec api composer install
+	docker-compose exec api php artisan key:generate
+	@make migrate
+	@make seed
+	@make npm-install
+	@make up
+
+remake:
+	@make destroy
+	@make build
+	docker-compose exec api cp .env.example .env
+	docker-compose exec api composer install
+	docker-compose exec api php artisan key:generate
+	@make migrate
+	@make seed
+	@make npm-install
+	@make up
+
 ps:
 	docker ps -a
 build:
@@ -44,6 +70,8 @@ down:
 restart:
 	docker-compose down
 	docker-compose up -d
+destroy:
+	docker-compose down --rmi all --volumes --remove-orphans
 
 api-bash:
 	docker-compose exec api bash
