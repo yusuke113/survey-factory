@@ -24,6 +24,9 @@ make ps
 ※Postmanが手元にない方はブラウザからでも可
 これでサイトにアクセスできます。
 
+- バックエンド
+http://localhost:8080/api/health
+- フロントエンド
 http://localhost:3333/
 
 ### APIルーティングの確認方法
