@@ -1,0 +1,264 @@
+openapi: 3.0.0
+info:
+  title: Todo-Train内部API
+  version: '1.0'
+  description: Todo-Train内部で使用するAPI
+servers:
+  - url: 'http://localhost:8080'
+    description: 更新用
+  - url: 'http://nginx:80'
+    description: SSR用（取得用）
+paths:
+  /api/posts:
+    get:
+      summary: 投稿一覧取得
+      operationId: get-api-posts
+      responses:
+        '200':
+          description: 投稿一覧の返却成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 投稿ID
+                        content:
+                          type: string
+                          description: 投稿内容
+                        created_at:
+                          type: string
+                          description: 作成日時
+                        user:
+                          type: object
+                          required:
+                            - id
+                            - name
+                            - avatar
+                          properties:
+                            id:
+                              type: integer
+                              description: ユーザーID
+                            name:
+                              type: string
+                              description: ユーザー名
+                            avatar:
+                              type: string
+                              description: ユーザー画像
+                      required:
+                        - id
+                        - content
+                        - created_at
+                        - user
+                  pager:
+                    type: object
+                    required:
+                      - currentPage
+                      - lastPage
+                      - allCount
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: 現在のページ番号
+                      lastPage:
+                        type: integer
+                        description: 末尾のページ番号
+                      allCount:
+                        type: integer
+                        description: 総件数
+                required:
+                  - posts
+                  - pager
+              examples:
+                example:
+                  value:
+                    posts:
+                      - id: 3
+                        content: PHP/Laravel
+                        created_at: '2022-11-01 00:00:00'
+                        user:
+                          id: 2
+                          name: テストユーザー1
+                          avatar: 'https://placehold.jp/3d4070/ffffff/150x150.png'
+                    pager:
+                      currentPage: 1
+                      lastPage: 3
+                      allCount: 30
+        '400':
+          description: バリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    required:
+                      - page
+                    properties:
+                      page:
+                        type: string
+                required:
+                  - message
+              examples:
+                example:
+                  value:
+                    message:
+                      page: ページ番号は整数で指定してください。
+        '404':
+          description: ページ番号が存在しない
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    required:
+                      - page
+                    properties:
+                      page:
+                        type: string
+                required:
+                  - message
+              examples:
+                example:
+                  value:
+                    message:
+                      page: ページが存在しません。
+      description: 投稿の一覧を返却
+      parameters:
+        - schema:
+            type: string
+            example: page=2
+          in: query
+          name: page
+          description: ページ番号
+      tags:
+        - 投稿
+    post:
+      summary: 投稿登録
+      operationId: post-api-posts
+      responses:
+        '200':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: 登録が完了しました。
+        '400':
+          description: バリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+              examples:
+                example:
+                  value:
+                    message:
+                      content: 表記名は、140文字以下で指定してください。
+      description: 投稿を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+            examples:
+              example:
+                value:
+                  content: 今日は何しようかな
+      tags:
+        - 投稿
+  '/api/posts/{postId}':
+    parameters:
+      - schema:
+          type: number
+          example: 2
+        name: postId
+        in: path
+        required: true
+        description: 投稿ID
+    delete:
+      summary: 投稿削除
+      operationId: delete-api-posts-postId
+      description: 指定されたIDの投稿を削除する
+      tags:
+        - 投稿
+      responses:
+        '200':
+          description: 削除成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: 削除が完了しました。
+        '400':
+          description: バリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    required:
+                      - postId
+                    properties:
+                      postId:
+                        type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message:
+                      postId: 投稿IDは整数で指定してください。
+        '404':
+          description: 投稿が存在しない
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: 投稿が存在しません。
+components:
+  schemas: {}
+tags:
+  - name: 投稿

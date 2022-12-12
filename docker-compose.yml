@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: docker/client/Dockerfile
+    volumes:
+      - ./client:/var/www
+    ports:
+      - 3333:3333
+    depends_on:
+      - nginx
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    volumes:
+      - ./api/src/:/api/src
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - api
+    volumes:
+      - ./api/src/:/api/src
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    platform: linux/amd64
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: surveyfactory
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - type: bind
+        source: ./docker/db/sql
+        target: /docker-entrypoint-initdb.d
+      - type: bind
+        source: ./docker/db/my.conf
+        target: /etc/mysql/conf.d/my.conf
+      - mysql-volume:/var/lib/mysql
+
+volumes:
+  mysql-volume:

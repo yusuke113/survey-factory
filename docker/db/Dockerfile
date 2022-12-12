@@ -1,0 +1,5 @@
+FROM mysql:8.0-debian
+
+ENV LANG ja_JP.UTF-8
+ENV LANGUAGE ja_JP:ja
+ENV LC_ALL ja_JP.UTF-8

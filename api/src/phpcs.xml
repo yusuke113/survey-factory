@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="Survey Factory Coding Standard">
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
+    <arg value="ps" />
+
+    <rule ref="PSR2">
+    </rule>
+
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>database/migrations</exclude-pattern>
+        <exclude-pattern>database/seeders</exclude-pattern>
+    </rule>
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests</exclude-pattern>
+    </rule>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120" />
+            <property name="absoluteLineLimit" value="120" />
+        </properties>
+    </rule>
+
+    <exclude-pattern>bootstrap/</exclude-pattern>
+    <exclude-pattern>public/</exclude-pattern>
+    <exclude-pattern>resources/</exclude-pattern>
+    <exclude-pattern>storage/</exclude-pattern>
+    <exclude-pattern>vendor/</exclude-pattern>
+</ruleset>
