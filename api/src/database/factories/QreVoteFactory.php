@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\QreChoice;
+use App\Models\QreVote;
+use App\Models\Questionnaire;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models>
  */
-class UserFactory extends Factory
+class QreVoteFactory extends Factory
 {
     /**
      * ファクトリと対応するモデルの名前
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = QreVote::class;
 
     /**
      * Define the model's default state.
@@ -28,11 +30,13 @@ class UserFactory extends Factory
     public function definition()
     {
         $dateTime = fake()->dateTimeThisYear(timezone: 'Asia/Tokyo');
+        $QuestionnaireIds = Questionnaire::all()->pluck('id')->toArray();
+        $QreChoiceIds = QreChoice::all()->pluck('id')->toArray();
         return [
             'uuid' => (string) Str::uuid(),
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'avatar' => fake()->imageUrl(400, 400),
+            'questionnaire_id' => fake()->randomElement($QuestionnaireIds),
+            'qre_choices_id' => fake()->randomElement($QreChoiceIds),
+            'user_token' => Str::random(24),
             'created_at' => $dateTime,
             'updated_at' => $dateTime,
         ];

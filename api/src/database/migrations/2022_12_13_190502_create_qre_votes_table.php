@@ -14,12 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id()->comment('ユーザーID');
-            $table->uuid()->unique('idx_users_uuid')->comment('ユーザーUUID');
-            $table->string('name')->comment('ユーザー名');
-            $table->string('email', 256)->unique('idx_users_email')->comment('メールアドレス');
-            $table->string('avatar', 2083)->nullable()->comment('アバター画像URL');
+        Schema::create('qre_votes', function (Blueprint $table) {
+            $table->id()->comment('アンケート投票ID');
+            $table->uuid()->unique('idx_questionnaires_uuid')->comment('アンケート投票UUID');
+            $table->foreignId('questionnaire_id')->constrained()->index('idx_qre_votes_questionnaire_id')->comment('アンケートID');
+            $table->foreignId('qre_choices_id')->constrained()->index('idx_qre_votes_qre_choice_id')->comment('アンケート選択肢ID');
+            $table->char('user_token', 36)->comment('投票者トークン');
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('作成日時');
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->comment('削除日時');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('qre_votes');
     }
 };

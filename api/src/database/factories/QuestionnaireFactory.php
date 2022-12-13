@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Questionnaire;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models>
  */
-class UserFactory extends Factory
+class QuestionnaireFactory extends Factory
 {
     /**
      * ファクトリと対応するモデルの名前
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Questionnaire::class;
 
     /**
      * Define the model's default state.
@@ -28,11 +29,13 @@ class UserFactory extends Factory
     public function definition()
     {
         $dateTime = fake()->dateTimeThisYear(timezone: 'Asia/Tokyo');
+        $userIds = User::all()->pluck('id')->toArray();
         return [
             'uuid' => (string) Str::uuid(),
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'avatar' => fake()->imageUrl(400, 400),
+            'user_id' => fake()->randomElement($userIds),
+            'title' => fake()->realText(30, 1),
+            'description' => fake()->realText(50, 1),
+            'thumbnail_url' => fake()->imageUrl(1280, 1280),
             'created_at' => $dateTime,
             'updated_at' => $dateTime,
         ];

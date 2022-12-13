@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,13 +14,12 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Schema::disableForeignKeyConstraints();
+        $this->call(UserTableSeeder::class);
+        $this->call(QuestionnaireTableSeeder::class);
+        $this->call(QreVoteTableSeeder::class);
+        Schema::enableForeignKeyConstraints();
     }
 }
