@@ -82,6 +82,10 @@ paths:
                         user:
                           id: 5
                           name: テストユーザーB
+                    pager:
+                      currentPage: 1
+                      lastPage: 2
+                      allCount: 15
         '400':
           description: バリデーション失敗
           content:
