@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Database\Factories\QreChoiceFactory;
+use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class QreChoice extends Model
+class Tag extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -22,26 +23,16 @@ class QreChoice extends Model
      */
     protected static function newFactory(): Factory
     {
-        return QreChoiceFactory::new();
+        return TagFactory::new();
     }
 
     /**
      * アンケート
      *
-     * @return BelongsTo
+     * @return BelongsToMany
      */
-    public function questionnaire(): BelongsTo
+    public function questionnaires(): BelongsToMany
     {
-        return $this->belongsTo(Questionnaire::class);
-    }
-
-    /**
-     * アンケート投票
-     *
-     * @return BelongsTo
-     */
-    public function qreVote(): BelongsTo
-    {
-        return $this->belongsTo(QreVote::class);
+        return $this->belongsToMany(Questionnaire::class);
     }
 }
