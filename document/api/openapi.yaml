@@ -1,46 +1,51 @@
 openapi: 3.0.0
 info:
-  title: Todo-Train内部API
+  title: Survey-Factory内部API
   version: '1.0'
-  description: Todo-Train内部で使用するAPI
+  description: Survey-Factory内部で使用するAPI
 servers:
   - url: 'http://localhost:8080'
-    description: 更新用
+    description: クライアント
   - url: 'http://nginx:80'
     description: SSR用（取得用）
 paths:
-  /api/posts:
-    get:
-      summary: 投稿一覧取得
-      operationId: get-api-posts
+  /api/v1/questionnaires/ranking:
+    post:
+      summary: アンケートランキング一覧取得
+      operationId: post-api-v1-questionnaires-ranking
       responses:
         '200':
-          description: 投稿一覧の返却成功
+          description: アンケートランキング一覧の返却成功
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  posts:
+                  questionnaires:
                     type: array
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          description: 投稿ID
-                        content:
+                          description: アンケートID
+                        title:
                           type: string
-                          description: 投稿内容
+                          description: アンケートタイトル
+                        description:
+                          type: string
+                          description: アンケート説明
                         created_at:
                           type: string
                           description: 作成日時
+                        voteCountAll:
+                          type: integer
+                          description: アンケート総投票数
                         user:
                           type: object
                           required:
                             - id
                             - name
-                            - avatar
                           properties:
                             id:
                               type: integer
@@ -48,48 +53,35 @@ paths:
                             name:
                               type: string
                               description: ユーザー名
-                            avatar:
-                              type: string
-                              description: ユーザー画像
                       required:
                         - id
-                        - content
+                        - title
+                        - description
                         - created_at
+                        - voteCountAll
                         - user
-                  pager:
-                    type: object
-                    required:
-                      - currentPage
-                      - lastPage
-                      - allCount
-                    properties:
-                      currentPage:
-                        type: integer
-                        description: 現在のページ番号
-                      lastPage:
-                        type: integer
-                        description: 末尾のページ番号
-                      allCount:
-                        type: integer
-                        description: 総件数
                 required:
-                  - posts
-                  - pager
+                  - questionnaires
               examples:
                 example:
                   value:
-                    posts:
-                      - id: 3
-                        content: PHP/Laravel
+                    questionnaires:
+                      - id: 123
+                        title: アンケートタイトルA
+                        description: アンケートの説明文A
                         created_at: '2022-11-01 00:00:00'
+                        voteCountAll: 100
                         user:
                           id: 2
-                          name: テストユーザー1
-                          avatar: 'https://placehold.jp/3d4070/ffffff/150x150.png'
-                    pager:
-                      currentPage: 1
-                      lastPage: 3
-                      allCount: 30
+                          name: テストユーザーA
+                      - id: 456
+                        title: アンケートタイトルB
+                        description: アンケートの説明文B
+                        created_at: '2022-10-01 00:00:00'
+                        voteCountAll: 100
+                        user:
+                          id: 5
+                          name: テストユーザーB
         '400':
           description: バリデーション失敗
           content:
@@ -99,15 +91,220 @@ paths:
                 properties:
                   message:
                     type: object
-                    required:
-                      - page
                     properties:
+                      case:
+                        type: string
                       page:
+                        type: string
+                      limit:
                         type: string
                 required:
                   - message
               examples:
+                Example:
+                  value:
+                    message:
+                      case: ランキング種類は必ず指定してください。
+                      page: ページ番号は整数で指定してください。
+                      limit: 取得件数は整数で指定してください。
+        '404':
+          description: ページ番号が存在しない
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
                 example:
+                  value:
+                    message: ページが存在しません。
+      description: アンケートのランキング一覧を返却
+      parameters: []
+      tags:
+        - アンケート
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                case:
+                  type: string
+                  description: ランキング種類
+                page:
+                  type: integer
+                  description: ページ番号
+                limit:
+                  type: integer
+                  description: 取得件数
+              required:
+                - case
+                - page
+                - limit
+            examples:
+              Example:
+                value:
+                  case: vote
+                  page: 1
+                  limit: 10
+    parameters: []
+  /api/v1/questionnaires/create:
+    get:
+      summary: アンケート作成画面情報取得
+      operationId: get-api-v1-questionnaires-create
+      responses:
+        '200':
+          description: アンケート作成画面情報返却成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    required:
+                      - id
+                      - name
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                required:
+                  - user
+              examples:
+                Example:
+                  value:
+                    user:
+                      id: 33
+                      name: テストユーザー
+        '401':
+          description: トークンまたは認証情報が不正
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: 認証に失敗しました。
+      description: アンケート作成画面情報を返却する
+      parameters: []
+      tags:
+        - アンケート
+    parameters: []
+  '/api/v1/questionnaires/{questionnaireId}':
+    get:
+      summary: アンケートプレイ画面詳細取得
+      operationId: get-api-v1-questionnaires-questionnaireId
+      responses:
+        '200':
+          description: アンケートプレイ画面詳細の返却成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Questionnaire:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - description
+                      - thumbnail_url
+                      - voteCountAll
+                      - user
+                    properties:
+                      id:
+                        type: integer
+                        description: アンケートID
+                      title:
+                        type: string
+                        description: アンケートタイトル
+                      description:
+                        type: string
+                        description: アンケート説明
+                      thumbnail_url:
+                        type: string
+                        description: サムネイルURL
+                      voteCountAll:
+                        type: integer
+                        description: アンケート総投票数
+                      user:
+                        type: object
+                        required:
+                          - id
+                          - name
+                        properties:
+                          id:
+                            type: integer
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: ユーザー名
+                  qreChoices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: アンケート選択肢ID
+                        body:
+                          type: string
+                          description: 選択肢内容
+                        voteCount:
+                          type: integer
+                          description: 投票数
+                      required:
+                        - id
+                        - body
+                        - voteCount
+                required:
+                  - Questionnaire
+                  - qreChoices
+              examples:
+                example:
+                  value:
+                    Questionnaire:
+                      id: 222
+                      title: アンケートタイトルA
+                      description: アンケート説明文A
+                      thumbnail_url: 'https://images1.png'
+                      voteCountAll: 150
+                      user:
+                        id: 33
+                        name: テストユーザー
+                    qreChoices:
+                      - id: 123
+                        body: 選択肢内容A
+                        voteCount: 100
+                      - id: 456
+                        body: 選択肢内容B
+                        voteCount: 50
+        '400':
+          description: バリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      page:
+                        type: string
+              examples:
+                Example:
                   value:
                     message:
                       page: ページ番号は整数で指定してください。
@@ -119,32 +316,143 @@ paths:
                 type: object
                 properties:
                   message:
-                    type: object
-                    required:
-                      - page
-                    properties:
-                      page:
-                        type: string
+                    type: string
                 required:
                   - message
               examples:
                 example:
                   value:
-                    message:
-                      page: ページが存在しません。
-      description: 投稿の一覧を返却
-      parameters:
-        - schema:
-            type: string
-            example: page=2
-          in: query
-          name: page
-          description: ページ番号
+                    message: ページが存在しません。
+      description: アンケートプレイ画面の詳細を返却
+      parameters: []
       tags:
-        - 投稿
+        - アンケート
+    parameters:
+      - schema:
+          type: string
+        name: questionnaireId
+        in: path
+        required: true
+  /api/v1/questionnaires/:
+    parameters: []
     post:
-      summary: 投稿登録
-      operationId: post-api-posts
+      summary: アンケート登録
+      operationId: post-api-v1-questionnaires
+      responses:
+        '201':
+          description: 登録成功
+        '400':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        description: アンケートタイトル
+                      description:
+                        type: string
+                        description: アンケート説明
+                      thumbnail_url:
+                        type: string
+                        description: サムネイルURL
+                      qreChoices:
+                        type: object
+                        properties:
+                          body:
+                            type: string
+                            description: 選択肢内容
+                          displayOrder:
+                            type: string
+                            description: 選択肢順序
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message:
+                      title: タイトルは、255文字以下で指定してください。
+                      description: アンケートの説明は必ず指定してください。
+                      thumbnail_url: サムネイルに正しい形式を指定してください。
+                      qreChoices:
+                        body: 選択肢は必ず指定してください。
+                        displayOrder: 設問順序は、整数で指定してください。
+        '401':
+          description: トークンまたは認証情報が不正
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Example:
+                  value:
+                    message: 認証に失敗しました。
+      description: アンケートを登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Questionnaire:
+                  type: object
+                  required:
+                    - title
+                    - description
+                    - qreChoices
+                  properties:
+                    title:
+                      type: string
+                      description: アンケートタイトル
+                    description:
+                      type: string
+                      description: アンケート説明
+                    thumbnail_url:
+                      type: string
+                      description: サムネイルURL
+                    qreChoices:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          body:
+                            type: string
+                            description: 選択肢内容
+                          displayOrder:
+                            type: integer
+                            description: 選択肢順序
+                        required:
+                          - body
+                          - displayOrder
+              required:
+                - Questionnaire
+            examples:
+              Example:
+                value:
+                  Questionnaire:
+                    title: アンケートタイトルA
+                    description: アンケート説明文A
+                    thumbnail_url: ''
+                    qreChoices:
+                      - body: 選択肢内容A
+                        displayOrder: 1
+                      - body: 選択肢内容B
+                        displayOrder: 2
+        description: アンケート情報
+      tags:
+        - アンケート
+  /api/v1/questionnaires/votes:
+    parameters: []
+    post:
+      summary: アンケート投票登録
+      operationId: post-api-v1-questionnaires-votes
       responses:
         '200':
           description: 登録成功
@@ -156,7 +464,7 @@ paths:
                   message:
                     type: string
               examples:
-                example:
+                Example:
                   value:
                     message: 登録が完了しました。
         '400':
@@ -169,96 +477,84 @@ paths:
                   message:
                     type: object
                     properties:
-                      content:
+                      questionnaireId:
                         type: string
+                      choiceId:
+                        type: string
+                      userToken:
+                        type: string
+                required:
+                  - message
               examples:
-                example:
+                Example:
                   value:
                     message:
-                      content: 表記名は、140文字以下で指定してください。
-      description: 投稿を登録する
+                      questionnaireId: アンケートIDは必ず指定してください。
+                      choiceId: アンケート選択肢IDは必ず指定してください。
+                      userToken: 投票者トークンは必ず指定してください。
+        '404':
+          description: IDに一致するアンケートまたはアンケート選択肢が存在しない
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: アンケートが存在しません。
+        '409':
+          description: 投票済みのユーザー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: 既に投票済みです。
+      tags:
+        - アンケート投票
+      description: アンケートの選択肢に投票を登録する
+      parameters: []
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                content:
+                questionnaireId:
+                  type: integer
+                  description: アンケートID
+                choiceId:
+                  type: integer
+                  description: アンケート選択肢ID
+                userToken:
                   type: string
+                  description: 投票者トークン
+              required:
+                - questionnaireId
+                - choiceId
+                - userToken
             examples:
-              example:
+              Example:
                 value:
-                  content: 今日は何しようかな
-      tags:
-        - 投稿
-  '/api/posts/{postId}':
-    parameters:
-      - schema:
-          type: number
-          example: 2
-        name: postId
-        in: path
-        required: true
-        description: 投稿ID
-    delete:
-      summary: 投稿削除
-      operationId: delete-api-posts-postId
-      description: 指定されたIDの投稿を削除する
-      tags:
-        - 投稿
-      responses:
-        '200':
-          description: 削除成功
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message: 削除が完了しました。
-        '400':
-          description: バリデーション失敗
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    required:
-                      - postId
-                    properties:
-                      postId:
-                        type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message:
-                      postId: 投稿IDは整数で指定してください。
-        '404':
-          description: 投稿が存在しない
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message: 投稿が存在しません。
+                  questionnaireId: 123
+                  choiceId: 33
+                  userToken: agNQYWjc6ypVT45stPkrMrOv
+        description: アンケート投票情報
 components:
   schemas: {}
 tags:
-  - name: 投稿
+  - name: アンケート
+  - name: アンケート投票
+  - name: ユーザー
