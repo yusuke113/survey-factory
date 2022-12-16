@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Domain\Exception\NotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Throwable;
