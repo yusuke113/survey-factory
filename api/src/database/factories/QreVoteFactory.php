@@ -30,12 +30,13 @@ class QreVoteFactory extends Factory
     public function definition()
     {
         $dateTime = fake()->dateTimeThisYear(timezone: 'Asia/Tokyo');
-        $QuestionnaireIds = Questionnaire::all()->pluck('id')->toArray();
-        $QreChoiceIds = QreChoice::all()->pluck('id')->toArray();
+        $questionnaireIds = Questionnaire::all()->pluck('id')->toArray();
+        $questionnaire = Questionnaire::find(fake()->randomElement($questionnaireIds));
+        $qreChoices = $questionnaire->qreChoices()->pluck('id')->toArray();
         return [
             'uuid' => (string) Str::uuid(),
-            'questionnaire_id' => fake()->randomElement($QuestionnaireIds),
-            'qre_choice_id' => fake()->randomElement($QreChoiceIds),
+            'questionnaire_id' => $questionnaire->id,
+            'qre_choice_id' => fake()->randomElement($qreChoices),
             'user_token' => Str::random(24),
             'created_at' => $dateTime,
             'updated_at' => $dateTime,
