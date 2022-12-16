@@ -117,21 +117,6 @@ paths:
                       case: ランキング種類は必ず指定してください。
                       page: ページ番号は整数で指定してください。
                       limit: 取得件数は整数で指定してください。
-        '404':
-          description: ページ番号が存在しない
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                example:
-                  value:
-                    message: ページが存在しません。
       description: アンケートのランキング一覧を返却
       parameters: []
       tags:
