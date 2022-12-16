@@ -30,7 +30,7 @@ final class GetQuestionnaire
         int $questionnaireId,
     ): array {
         $questionnaire = $this->questionnaireRepository->findById($questionnaireId);
-
+        
         if (is_null($questionnaire)) {
             throw new NotFoundException(__('exception.not_found.attributes.questionnaire'));
         }

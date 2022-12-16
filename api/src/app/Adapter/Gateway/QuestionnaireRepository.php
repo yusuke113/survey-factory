@@ -24,7 +24,7 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findById(int $questionnaireId): Questionnaire
+    public function findById(int $questionnaireId): ?Questionnaire
     {
         return Questionnaire::withCount('qreVotes')->find($questionnaireId);
     }

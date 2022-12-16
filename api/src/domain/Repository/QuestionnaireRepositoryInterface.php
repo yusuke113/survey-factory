@@ -26,7 +26,7 @@ interface QuestionnaireRepositoryInterface
      * アンケートIDからアンケートを取得する
      *
      * @param int $questionnaireId
-     * @return Questionnaire
+     * @return Questionnaire|null
      */
-    public function findById(int $questionnaireId): Questionnaire;
+    public function findById(int $questionnaireId): ?Questionnaire;
 }
