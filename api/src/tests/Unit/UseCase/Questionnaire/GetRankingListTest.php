@@ -75,13 +75,13 @@ class GetRankingListTest extends TestCase
         QreVote::factory(30)->create(
             [
                 'questionnaire_id' => 11,
-                'qre_choices_id' => Questionnaire::find(11)->qreChoices->first()->id,
+                'qre_choice_id' => Questionnaire::find(11)->qreChoices->first()->id,
             ]
         );
         QreVote::factory(50)->create(
             [
                 'questionnaire_id' => 22,
-                'qre_choices_id' => Questionnaire::find(22)->qreChoices->first()->id,
+                'qre_choice_id' => Questionnaire::find(22)->qreChoices->first()->id,
             ]
         );
 
@@ -167,7 +167,7 @@ class GetRankingListTest extends TestCase
         foreach ($votes as $vote) {
             QreVote::factory($vote['count'])->create([
                 'questionnaire_id' => $vote['questionnaireId'],
-                'qre_choices_id' => $vote['qre_choices_id']
+                'qre_choice_id' => $vote['qre_choice_id']
             ]);
         }
 
@@ -203,17 +203,17 @@ class GetRankingListTest extends TestCase
                 'アンケート投票登録値' => [
                     [
                         'questionnaireId' => 11,
-                        'qre_choices_id' => 1,
+                        'qre_choice_id' => 1,
                         'count' => 10,
                     ],
                     [
                         'questionnaireId' => 22,
-                        'qre_choices_id' => 2,
+                        'qre_choice_id' => 2,
                         'count' => 30,
                     ],
                     [
                         'questionnaireId' => 33,
-                        'qre_choices_id' => 3,
+                        'qre_choice_id' => 3,
                         'count' => 20,
                     ],
                 ],
@@ -244,7 +244,7 @@ class GetRankingListTest extends TestCase
         $questionnaires = Questionnaire::all()->pluck('id')->toArray();
         QreVote::factory($voteCount)->create([
             'questionnaire_id' => array_rand($questionnaires, 1),
-            'qre_choices_id' => rand(1, 10)
+            'qre_choice_id' => rand(1, 10)
         ]);
 
         $actual = ($this->useCase)(...$input)['pager'];
@@ -304,7 +304,7 @@ class GetRankingListTest extends TestCase
         $questionnaires = Questionnaire::all()->pluck('id')->toArray();
         QreVote::factory($voteCount)->create([
             'questionnaire_id' => array_rand($questionnaires, 1),
-            'qre_choices_id' => rand(1, 10)
+            'qre_choice_id' => rand(1, 10)
         ]);
 
         ($this->useCase)(...$input);
