@@ -125,8 +125,8 @@ class GetRankingListTest extends TestCase
                         'id' => 22,
                         'title' => 'アンケートタイトル2',
                         'description' => 'アンケート説明文2',
-                        'thumbnail_url' => 'https://chiikawa-info.jp/images/pic06.jpg',
-                        'created_at' => '2022-10-01 00:00:00',
+                        'thumbnailUrl' => 'https://chiikawa-info.jp/images/pic06.jpg',
+                        'createdAt' => '2022-10-01 00:00:00',
                         'voteCountAll' => 50,
                         "user" => [
                             "id" => 2,
@@ -137,8 +137,8 @@ class GetRankingListTest extends TestCase
                         'id' => 11,
                         'title' => 'アンケートタイトル1',
                         'description' => 'アンケート説明文1',
-                        'thumbnail_url' => 'https://chiikawa-info.jp/images/pic06.jpg',
-                        'created_at' => '2022-11-01 00:00:00',
+                        'thumbnailUrl' => 'https://chiikawa-info.jp/images/pic06.jpg',
+                        'createdAt' => '2022-11-01 00:00:00',
                         'voteCountAll' => 30,
                         "user" => [
                             "id" => 1,

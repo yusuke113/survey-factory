@@ -35,8 +35,8 @@ final class GetRankingListPresenter
                     "id" => $questionnaire->id,
                     "title" => $questionnaire->title,
                     "description" => $questionnaire->description,
-                    "thumbnail_url" => $questionnaire->thumbnail_url,
-                    "created_at" => (new Carbon($questionnaire->created_at))->toDateTimeString(),
+                    "thumbnailUrl" => $questionnaire->thumbnail_url,
+                    "createdAt" => (new Carbon($questionnaire->created_at))->toDateTimeString(),
                     "voteCountAll" => $questionnaire->qre_votes_count,
                     "user" => [
                         "id" => $questionnaire->user->id,
