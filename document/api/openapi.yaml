@@ -301,13 +301,14 @@ paths:
                   message:
                     type: object
                     properties:
-                      page:
+                      questionnaireId:
                         type: string
+                        description: アンケートID
               examples:
                 Example:
                   value:
                     message:
-                      page: ページ番号は整数で指定してください。
+                      questionnaireId: アンケートIdは整数で指定してください。
         '404':
           description: ページ番号が存在しない
           content:
@@ -322,7 +323,7 @@ paths:
               examples:
                 example:
                   value:
-                    message: ページが存在しません。
+                    message: アンケートが存在しません。
       description: アンケートプレイ画面の詳細を返却
       parameters: []
       tags:
