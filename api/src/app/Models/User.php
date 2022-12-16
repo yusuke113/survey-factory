@@ -44,7 +44,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function ctrFields(): HasMany
+    public function questionnaires(): HasMany
     {
         return $this->hasMany(Questionnaire::class);
     }

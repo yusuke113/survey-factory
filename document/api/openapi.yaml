@@ -35,6 +35,9 @@ paths:
                         description:
                           type: string
                           description: アンケート説明
+                        thumbnailUrl:
+                          type: string
+                          description: サムネイルURL
                         created_at:
                           type: string
                           description: 作成日時
@@ -57,6 +60,7 @@ paths:
                         - id
                         - title
                         - description
+                        - thumbnailUrl
                         - created_at
                         - voteCountAll
                         - user
@@ -69,6 +73,7 @@ paths:
                       - id: 123
                         title: アンケートタイトルA
                         description: アンケートの説明文A
+                        thumbnailUrl: 'https://via.placeholder.com/1280x1280.png/00aabb?text=possimus'
                         created_at: '2022-11-01 00:00:00'
                         voteCountAll: 100
                         user:
@@ -77,11 +82,16 @@ paths:
                       - id: 456
                         title: アンケートタイトルB
                         description: アンケートの説明文B
+                        thumbnailUrl: 'https://via.placeholder.com/1280x1280.png/'
                         created_at: '2022-10-01 00:00:00'
-                        voteCountAll: 100
+                        voteCountAll: 80
                         user:
                           id: 5
                           name: テストユーザーB
+                    pager:
+                      currentPage: 1
+                      lastPage: 2
+                      allCount: 15
         '400':
           description: バリデーション失敗
           content:

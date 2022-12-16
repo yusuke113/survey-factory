@@ -16,8 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::as('api.')->group(function () {
     Route::prefix('/v1')->as('v1.')->group(function () {
-        // TODO:ここにAPIを記述
+        Route::prefix('questionnaires')->namespace('Questionnaire')->as('questionnaire.')->group(function () {
+            Route::post('/ranking', 'GetRanking')->name('ranking');
+        });
     });
+
     /**
      * ヘルスチェック用
      */
@@ -25,7 +28,7 @@ Route::as('api.')->group(function () {
         '/health',
         fn () => response()->json(['message' => 'OK'])
     )->name('health');
-    
+
     /**
      * APIのバージョンチェック用
      */
