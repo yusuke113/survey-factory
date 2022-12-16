@@ -22,6 +22,14 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findById(int $questionnaireId): ?Questionnaire
+    {
+        return Questionnaire::withCount('qreVotes')->find($questionnaireId);
+    }
+
+    /**
      * アンケートランキング一覧取得のクエリを実行する
      *
      * @param string $case

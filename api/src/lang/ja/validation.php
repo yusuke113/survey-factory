@@ -159,6 +159,7 @@ return [
         'case' => 'ランキング種類',
         'page' => 'ページ番号',
         'limit' => '取得件数',
+        'questionnaireId' => 'アンケートID'
     ],
 
 ];

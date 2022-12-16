@@ -38,7 +38,7 @@ paths:
                         thumbnailUrl:
                           type: string
                           description: サムネイルURL
-                        created_at:
+                        createdAt:
                           type: string
                           description: 作成日時
                         voteCountAll:
@@ -61,7 +61,7 @@ paths:
                         - title
                         - description
                         - thumbnailUrl
-                        - created_at
+                        - createdAt
                         - voteCountAll
                         - user
                 required:
@@ -74,7 +74,7 @@ paths:
                         title: アンケートタイトルA
                         description: アンケートの説明文A
                         thumbnailUrl: 'https://via.placeholder.com/1280x1280.png/00aabb?text=possimus'
-                        created_at: '2022-11-01 00:00:00'
+                        createdAt: '2022-11-01 00:00:00'
                         voteCountAll: 100
                         user:
                           id: 2
@@ -83,7 +83,7 @@ paths:
                         title: アンケートタイトルB
                         description: アンケートの説明文B
                         thumbnailUrl: 'https://via.placeholder.com/1280x1280.png/'
-                        created_at: '2022-10-01 00:00:00'
+                        createdAt: '2022-10-01 00:00:00'
                         voteCountAll: 80
                         user:
                           id: 5
@@ -117,21 +117,6 @@ paths:
                       case: ランキング種類は必ず指定してください。
                       page: ページ番号は整数で指定してください。
                       limit: 取得件数は整数で指定してください。
-        '404':
-          description: ページ番号が存在しない
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                example:
-                  value:
-                    message: ページが存在しません。
       description: アンケートのランキング一覧を返却
       parameters: []
       tags:
@@ -224,13 +209,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  Questionnaire:
+                  questionnaire:
                     type: object
                     required:
                       - id
                       - title
                       - description
-                      - thumbnail_url
+                      - thumbnailUrl
+                      - createdAt
                       - voteCountAll
                       - user
                     properties:
@@ -243,9 +229,12 @@ paths:
                       description:
                         type: string
                         description: アンケート説明
-                      thumbnail_url:
+                      thumbnailUrl:
                         type: string
                         description: サムネイルURL
+                      createdAt:
+                        type: string
+                        description: 作成日時
                       voteCountAll:
                         type: integer
                         description: アンケート総投票数
@@ -279,17 +268,27 @@ paths:
                         - id
                         - body
                         - voteCount
+                  tags:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
                 required:
-                  - Questionnaire
+                  - questionnaire
                   - qreChoices
               examples:
                 example:
                   value:
-                    Questionnaire:
+                    questionnaire:
                       id: 222
                       title: アンケートタイトルA
                       description: アンケート説明文A
-                      thumbnail_url: 'https://images1.png'
+                      thumbnailUrl: 'https://images1.png'
+                      createdAt: '2022-10-01 00:00:00'
                       voteCountAll: 150
                       user:
                         id: 33
@@ -301,6 +300,11 @@ paths:
                       - id: 456
                         body: 選択肢内容B
                         voteCount: 50
+                    tags:
+                      - id: 12
+                        body: アニメ
+                      - id: 34
+                        body: Youtube
         '400':
           description: バリデーション失敗
           content:
@@ -311,13 +315,14 @@ paths:
                   message:
                     type: object
                     properties:
-                      page:
+                      questionnaireId:
                         type: string
+                        description: アンケートID
               examples:
                 Example:
                   value:
                     message:
-                      page: ページ番号は整数で指定してください。
+                      questionnaireId: アンケートIdは整数で指定してください。
         '404':
           description: ページ番号が存在しない
           content:
@@ -332,7 +337,7 @@ paths:
               examples:
                 example:
                   value:
-                    message: ページが存在しません。
+                    message: アンケートが存在しません。
       description: アンケートプレイ画面の詳細を返却
       parameters: []
       tags:

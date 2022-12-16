@@ -18,6 +18,7 @@ Route::as('api.')->group(function () {
     Route::prefix('/v1')->as('v1.')->group(function () {
         Route::prefix('questionnaires')->namespace('Questionnaire')->as('questionnaire.')->group(function () {
             Route::post('/ranking', 'GetRanking')->name('ranking');
+            Route::get('/{questionnaireId}', 'Show')->name('show');
         });
     });
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QreChoice extends Model
@@ -38,10 +39,10 @@ class QreChoice extends Model
     /**
      * アンケート投票
      *
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function qreVote(): BelongsTo
+    public function qreVotes(): HasMany
     {
-        return $this->belongsTo(QreVote::class);
+        return $this->hasMany(QreVote::class);
     }
 }

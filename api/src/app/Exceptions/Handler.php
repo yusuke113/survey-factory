@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Domain\Exception\NotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
+use Symfony\Component\HttpFoundation\Response as StatusCode;
 
 class Handler extends ExceptionHandler
 {
@@ -38,13 +41,23 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
-     *
+     * @param Throwable $exception
+     * @param Request $request
      * @return void
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $exception, Request $request) {
+            if ($request->is('api/*')) {
+                $class = get_class($exception);
+                switch ($class) {
+                    case NotFoundException::class:
+                        return response()->json(
+                            ['message' => $exception->getMessage()],
+                            StatusCode::HTTP_NOT_FOUND
+                        );
+                }
+            }
         });
     }
 }
