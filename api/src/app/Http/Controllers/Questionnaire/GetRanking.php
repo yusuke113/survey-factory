@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 final class GetRanking extends Controller
 {
     /**
-     * メアンケートランキング一覧を取得する
+     * アンケートランキング一覧を取得する
      *
      * @param GetRankingList $useCase
      * @param GetRankingRequest $request
