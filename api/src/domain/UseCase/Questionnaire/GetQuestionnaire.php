@@ -26,11 +26,10 @@ final class GetQuestionnaire
      * @param int $questionnaireId
      * @return array
      */
-    public function __invoke(
-        int $questionnaireId,
-    ): array {
+    public function __invoke(int $questionnaireId): array
+    {
         $questionnaire = $this->questionnaireRepository->findById($questionnaireId);
-        
+
         if (is_null($questionnaire)) {
             throw new NotFoundException(__('exception.not_found.attributes.questionnaire'));
         }
