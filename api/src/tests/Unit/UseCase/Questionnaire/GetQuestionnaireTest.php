@@ -8,6 +8,7 @@ use App\Models\QreChoice;
 use App\Models\QreVote;
 use App\Models\Questionnaire;
 use App\Models\User;
+use Domain\Exception\NotFoundException;
 use Domain\UseCase\Questionnaire\GetQuestionnaire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DisableForeignKeyConstraints;
@@ -132,6 +133,129 @@ class GetQuestionnaireTest extends TestCase
                         "id" => 1,
                         "name" => 'テストユーザー1'
                     ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider 指定したアンケートIDに一致するアンケート選択肢の詳細を取得できること_provider
+     *
+     * @return void
+     */
+    public function 指定したアンケートIDに一致するアンケート選択肢の詳細を取得できること(
+        $voteCount1,
+        $voteCount2,
+        $input,
+        $expected
+    ) {
+        // アンケート投票のテストデータを作成
+        QreVote::factory($voteCount1)->create(
+            [
+                'questionnaire_id' => 11,
+                'qre_choice_id' => 1,
+            ]
+        );
+        QreVote::factory($voteCount2)->create(
+            [
+                'questionnaire_id' => 11,
+                'qre_choice_id' => 2,
+            ]
+        );
+
+        $actual = ($this->useCase)($input)['qreChoices'];
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function 指定したアンケートIDに一致するアンケート選択肢の詳細を取得できること_provider()
+    {
+        return [
+            '正常系' => [
+                '選択肢1への投票数' => 20,
+                '選択肢2への投票数' => 30,
+                '入力値' => 11,
+                '期待値' => [
+                    [
+                        "id" => 1,
+                        "body" => '選択肢1',
+                        "voteCount" => 20,
+                    ],
+                    [
+                        "id" => 2,
+                        "body" => '選択肢2',
+                        "voteCount" => 30,
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider 存在しないアンケートIDを指定した場合例外が発生すること_provider
+     *
+     * @return void
+     */
+    public function 存在しないアンケートIDを指定した場合例外が発生すること($input, $expected)
+    {
+        $this->expectException($expected['exception_class']);
+        $this->expectExceptionMessage($expected['message']);
+
+        ($this->useCase)($input);
+    }
+
+    /**
+     * @return array
+     */
+    public function 存在しないアンケートIDを指定した場合例外が発生すること_provider()
+    {
+        return [
+            '正常系' => [
+                '入力値' => 99,
+                '期待値' => [
+                    'exception_class' => NotFoundException::class,
+                    'message' => 'アンケートが存在しません。',
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider 論理削除されたアンケートIDを指定した場合例外が発生すること_provider
+     *
+     * @return void
+     */
+    public function 論理削除されたアンケートIDを指定した場合例外が発生すること($questionnaire, $input, $expected)
+    {
+        Questionnaire::factory()->create($questionnaire);
+
+        $this->expectException($expected['exception_class']);
+        $this->expectExceptionMessage($expected['message']);
+
+        ($this->useCase)($input);
+    }
+
+    /**
+     * @return array
+     */
+    public function 論理削除されたアンケートIDを指定した場合例外が発生すること_provider()
+    {
+        return [
+            '正常系' => [
+                '論理削除されたアンケート' => [
+                    'id' => 55,
+                    'deleted_at' => '2022-10-01 00:00:00',
+                ],
+                '入力値' => 55,
+                '期待値' => [
+                    'exception_class' => NotFoundException::class,
+                    'message' => 'アンケートが存在しません。',
                 ]
             ]
         ];
