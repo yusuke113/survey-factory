@@ -11,6 +11,7 @@ return [
         'message' => ':attributeが存在しません。',
         'attributes' => [
             'page' => 'ページ',
+            'questionnaire' => 'アンケート',
         ],
     ],
 ];

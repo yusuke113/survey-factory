@@ -24,6 +24,7 @@ class QuestionnaireTableSeeder extends Seeder
         DB::table('questionnaires')->truncate();
         DB::table('questionnaire_tag')->truncate();
 
+        // タグありのアンケート
         Questionnaire::factory()->count(12)
             // アンケート選択肢
             ->has(QreChoice::factory(2)->state(new Sequence(
@@ -40,5 +41,13 @@ class QuestionnaireTableSeeder extends Seeder
                 $questionnaire->tags()->attach($randomNumArray[0]);
                 $questionnaire->tags()->attach($randomNumArray[1]);
             });
+
+        // タグなしのアンケート
+        Questionnaire::factory()->count(3)
+            // アンケート選択肢
+            ->has(QreChoice::factory(2)->state(new Sequence(
+                ['display_order' => 1],
+                ['display_order' => 2],
+            )))->create();
     }
 }
