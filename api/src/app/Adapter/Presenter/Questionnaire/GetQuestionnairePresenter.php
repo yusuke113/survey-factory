@@ -6,6 +6,7 @@ namespace App\Adapter\Presenter\Questionnaire;
 
 use App\Models\QreChoice;
 use App\Models\Questionnaire;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
@@ -53,6 +54,12 @@ final class GetQuestionnairePresenter
                     "voteCount" => $qreChoice->qre_votes_count
                 ])
                 ->toArray(),
+            'tags' => $this->questionnaire->tags
+                ->map(fn(Tag $tag) => [
+                    "id" => $tag->id,
+                    "name" => $tag->name,
+                ])
+                ->toArray()
         ];
     }
 }

@@ -7,6 +7,7 @@ namespace Tests\Unit\UseCase\Questionnaire;
 use App\Models\QreChoice;
 use App\Models\QreVote;
 use App\Models\Questionnaire;
+use App\Models\Tag;
 use App\Models\User;
 use Domain\Exception\NotFoundException;
 use Domain\UseCase\Questionnaire\GetQuestionnaire;
@@ -69,6 +70,25 @@ class GetQuestionnaireTest extends TestCase
     ];
 
     /**
+     * アンケートのタグテストデータ
+     * @var array
+     */
+    private const TAGS = [
+        [
+            'id' => 1,
+            'name' => 'アニメ',
+        ],
+        [
+            'id' => 2,
+            'name' => 'Youtube',
+        ],
+        [
+            'id' => 3,
+            'name' => 'ゲーム',
+        ],
+    ];
+
+    /**
      * @throws BindingResolutionException
      */
     protected function setUp(): void
@@ -79,6 +99,7 @@ class GetQuestionnaireTest extends TestCase
         User::factory()->createMany(self::USERS);
         Questionnaire::factory()->create(self::QUESTIONNAIRE);
         QreChoice::factory()->createMany(self::QRE_CHOICES);
+        Tag::factory()->createMany(self::TAGS);
     }
 
     /**
@@ -192,6 +213,48 @@ class GetQuestionnaireTest extends TestCase
                     ],
                 ]
             ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider 指定したアンケートIDに一致するアンケートに紐づくタグを取得できること_provider
+     *
+     * @return void
+     */
+    public function 指定したアンケートIDに一致するアンケートに紐づくタグを取得できること(
+        $input,
+        $expected
+    ) {
+        // アンケートへタグの紐付け
+        $questionnaire = Questionnaire::first();
+        $questionnaire->tags()->attach(1);
+        $questionnaire->tags()->attach(2);
+
+        $actual = ($this->useCase)($input)['tags'];
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function 指定したアンケートIDに一致するアンケートに紐づくタグを取得できること_provider()
+    {
+        return [
+            'アンケートID11を指定' => [
+                '入力値' => 11,
+                '期待値' => [
+                    [
+                        "id" => 1,
+                        "name" => 'アニメ',
+                    ],
+                    [
+                        "id" => 2,
+                        "name" => 'Youtube',
+                    ],
+                ]
+            ],
         ];
     }
 

@@ -268,6 +268,15 @@ paths:
                         - id
                         - body
                         - voteCount
+                  tags:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
                 required:
                   - questionnaire
                   - qreChoices
@@ -291,6 +300,11 @@ paths:
                       - id: 456
                         body: 選択肢内容B
                         voteCount: 50
+                    tags:
+                      - id: 12
+                        body: アニメ
+                      - id: 34
+                        body: Youtube
         '400':
           description: バリデーション失敗
           content:
