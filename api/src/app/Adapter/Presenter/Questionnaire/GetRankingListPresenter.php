@@ -32,15 +32,15 @@ final class GetRankingListPresenter
         return [
             'questionnaires' => $this->questionnaires->getCollection()
                 ->map(fn(Questionnaire $questionnaire) => [
-                    "id" => $questionnaire->id,
-                    "title" => $questionnaire->title,
-                    "description" => $questionnaire->description,
-                    "thumbnailUrl" => $questionnaire->thumbnail_url,
-                    "createdAt" => (new Carbon($questionnaire->created_at))->toDateTimeString(),
-                    "voteCountAll" => $questionnaire->qre_votes_count,
-                    "user" => [
-                        "id" => $questionnaire->user->id,
-                        "name" => $questionnaire->user->name
+                    'id' => $questionnaire->id,
+                    'title' => $questionnaire->title,
+                    'description' => $questionnaire->description,
+                    'thumbnailUrl' => $questionnaire->thumbnail_url,
+                    'createdAt' => (new Carbon($questionnaire->created_at))->toDateTimeString(),
+                    'voteCountAll' => $questionnaire->qre_votes_count,
+                    'user' => [
+                        'id' => $questionnaire->user->id,
+                        'name' => $questionnaire->user->name
                     ]
                 ])
                 ->toArray(),

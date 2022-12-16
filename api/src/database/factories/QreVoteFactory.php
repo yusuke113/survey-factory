@@ -35,7 +35,7 @@ class QreVoteFactory extends Factory
         return [
             'uuid' => (string) Str::uuid(),
             'questionnaire_id' => fake()->randomElement($QuestionnaireIds),
-            'qre_choices_id' => fake()->randomElement($QreChoiceIds),
+            'qre_choice_id' => fake()->randomElement($QreChoiceIds),
             'user_token' => Str::random(24),
             'created_at' => $dateTime,
             'updated_at' => $dateTime,
