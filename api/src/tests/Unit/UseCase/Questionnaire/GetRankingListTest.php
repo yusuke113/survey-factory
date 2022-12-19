@@ -87,6 +87,8 @@ class GetRankingListTest extends TestCase
 
         $actual = ($this->useCase)(...$input)['questionnaires'];
 
+
+
         $this->assertSame($expected, $actual);
     }
 
@@ -116,7 +118,7 @@ class GetRankingListTest extends TestCase
                     ],
                 ],
                 '入力値' => [
-                    'case' => 'vote',
+                    'type' => 'vote',
                     'page' => 1,
                     'limit' => 30,
                 ],
@@ -218,7 +220,7 @@ class GetRankingListTest extends TestCase
                     ],
                 ],
                 '入力値' => [
-                    'case' => 'vote',
+                    'type' => 'vote',
                     'page' => 1,
                     'limit' => 30,
                 ],
@@ -262,7 +264,7 @@ class GetRankingListTest extends TestCase
                 'アンケート登録数' => 30,
                 'アンケート投票登録値' => 10,
                 '入力値' => [
-                    'case' => 'vote',
+                    'type' => 'vote',
                     'page' => 1,
                     'limit' => 30,
                 ],
@@ -276,7 +278,7 @@ class GetRankingListTest extends TestCase
                 'アンケート登録数' => 10,
                 'アンケート投票登録値' => 10,
                 '入力値' => [
-                    'case' => 'vote',
+                    'type' => 'vote',
                     'page' => 1,
                     'limit' => 5,
                 ],
@@ -322,7 +324,7 @@ class GetRankingListTest extends TestCase
                 'アンケート登録数' => 30,
                 'アンケート投票登録値' => 10,
                 '入力値' => [
-                    'case' => 'vote',
+                    'type' => 'vote',
                     'page' => 2,
                     'limit' => 30,
                 ],

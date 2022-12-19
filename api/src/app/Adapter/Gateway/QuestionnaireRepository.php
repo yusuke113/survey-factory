@@ -16,9 +16,9 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function search(string $case, int $page, int $limit): LengthAwarePaginator
+    public function search(string $type, int $page, int $limit): LengthAwarePaginator
     {
-        return $this->executeSearchQuery($case, $page, $limit);
+        return $this->executeSearchQuery($type, $page, $limit);
     }
 
     /**
@@ -32,17 +32,17 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     /**
      * アンケートランキング一覧取得のクエリを実行する
      *
-     * @param string $case
+     * @param string $type
      * @param int $page
      * @param int $limit
      * @return LengthAwarePaginator
      */
-    private function executeSearchQuery(string $case, int $page, int $limit): LengthAwarePaginator
+    private function executeSearchQuery(string $type, int $page, int $limit): LengthAwarePaginator
     {
         $sortType = '';
         $relationTable = '';
 
-        switch ($case) {
+        switch ($type) {
             default:
                 $sortType = 'qreVotes';
                 $relationTable = 'qre_votes';

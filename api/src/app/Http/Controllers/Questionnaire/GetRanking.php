@@ -26,7 +26,7 @@ final class GetRanking extends Controller
         GetRankingRequest $request
     ): JsonResponse {
         return response()->json($useCase(
-            $request->input('case'),
+            $request->input('type'),
             $request->int('page'),
             $request->int('limit')
         ));

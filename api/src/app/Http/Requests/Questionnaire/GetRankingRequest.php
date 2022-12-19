@@ -35,7 +35,7 @@ final class GetRankingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'case' => [
+            'type' => [
                 'required',
                 'string',
             ],

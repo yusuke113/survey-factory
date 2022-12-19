@@ -22,17 +22,17 @@ final class GetRankingList
     }
 
     /**
-     * @param string $case
+     * @param string $type
      * @param int $page
      * @param int $limit
      * @return array
      */
     public function __invoke(
-        string $case,
+        string $type,
         int $page,
         int $limit,
     ): array {
-        $questionnaires = $this->questionnaireRepository->search($case, $page, $limit);
+        $questionnaires = $this->questionnaireRepository->search($type, $page, $limit);
 
         return (new GetRankingListPresenter($questionnaires))->toArray();
     }

@@ -1,0 +1,75 @@
+/* Common
+----------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 32px 8px;
+}
+
+.heading_main {
+  text-align: center;
+}
+
+/* main visual
+----------------------------------------------------------------- */
+.main_visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: #ddd;
+}
+
+/* TOP
+----------------------------------------------------------------- */
+
+.ranking {
+  .ranking_list {
+    list-style: none;
+    li {
+      &:not(:first-child) {
+        margin-top: 10px;
+      }
+
+      a {
+        display: flex;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #fff;
+        transition: .2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+        &:hover {
+          box-shadow: 0 2px 8px #5e5d406b;
+          transform: translateY(-6px);
+        }
+      }
+
+      .thumbnail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40%;
+        min-height: 100px;
+        padding: 16px;
+        background: #ddd;
+        p {
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+
+      .detail {
+        padding: 16px;
+        .title {
+          margin-bottom: 10px;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        .detail_text {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

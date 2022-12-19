@@ -1,0 +1,32 @@
+@use '../../variables.scss' as *;
+
+.footer {
+  background: $footer_bg_color;
+  
+  .footer_inner {
+    position: relative;
+    width: 768px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 8px;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .footer_nav_button {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 12px;
+  }
+
+  small {
+    display: block;
+    text-align: center;
+  }
+}

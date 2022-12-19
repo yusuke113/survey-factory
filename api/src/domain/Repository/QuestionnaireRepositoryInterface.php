@@ -15,12 +15,12 @@ interface QuestionnaireRepositoryInterface
     /**
      * アンケートランキング一覧を取得する
      *
-     * @param string $case
+     * @param string $type
      * @param int $page
      * @param int $limit
      * @return LengthAwarePaginator
      */
-    public function search(string $case, int $page, int $limit): LengthAwarePaginator;
+    public function search(string $type, int $page, int $limit): LengthAwarePaginator;
 
     /**
      * アンケートIDからアンケートを取得する

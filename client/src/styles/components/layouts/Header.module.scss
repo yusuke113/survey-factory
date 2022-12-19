@@ -1,0 +1,31 @@
+@use '../../variables.scss' as *;
+
+.header {
+  background: $header_bg_color;
+  
+  .header_inner {
+    position: relative;
+    width: 768px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 8px;
+  }
+
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+
+  .header_nav_button {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    font-size: 12px;
+  }
+
+  .header_button_wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

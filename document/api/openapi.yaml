@@ -127,7 +127,7 @@ paths:
             schema:
               type: object
               properties:
-                case:
+                type:
                   type: string
                   description: ランキング種類
                 page:
@@ -137,13 +137,13 @@ paths:
                   type: integer
                   description: 取得件数
               required:
-                - case
+                - type
                 - page
                 - limit
             examples:
               Example:
                 value:
-                  case: vote
+                  type: vote
                   page: 1
                   limit: 10
     parameters: []
