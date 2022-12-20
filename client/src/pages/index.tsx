@@ -44,7 +44,7 @@ const Home: NextPage<HomePage> = ({ questionnaireRankingList }) => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const useCase = new QuestionnaireUseCase();
   const {data} = await useCase.getRankingList('vote', 1, 10);
 
