@@ -39,7 +39,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                     style={{width: qreChoices[0].voteCount / questionnaire.voteCountAll * 100 + '%'}}
                     >
                     <span>
-                      {Math.floor(qreChoices[0].voteCount / questionnaire.voteCountAll * 100)}%
+                      {Math.round(qreChoices[0].voteCount / questionnaire.voteCountAll * 100)}%
                     </span>
                 </div>
                 <div 
@@ -47,7 +47,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                   style={{width: qreChoices[1].voteCount / questionnaire.voteCountAll * 100 + '%'}}
                   >
                     <span>
-                      {Math.floor(qreChoices[1].voteCount / questionnaire.voteCountAll * 100)}%
+                      {Math.round(qreChoices[1].voteCount / questionnaire.voteCountAll * 100)}%
                     </span>
                 </div>
               </div>
