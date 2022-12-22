@@ -20,4 +20,13 @@ export class QuestionnaireUseCase {
   getRankingList(type: string, page: number, limit: number) {
     return this.questionnaireRepository.fetchRankingList(type, page, limit);
   }
+
+  /**
+   * 
+   * @param {number} questionnaireId 
+   * @returns {Object}
+   */
+  getQuestionnaire(questionnaireId: number) {
+    return this.questionnaireRepository.fetchQuestionnaire(questionnaireId);
+  }
 }
