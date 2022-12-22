@@ -424,75 +424,69 @@ paths:
             schema:
               type: object
               properties:
-                Questionnaire:
-                  type: object
-                  required:
-                    - userId
-                    - title
-                    - description
-                    - qreChoices
-                    - tags
-                  properties:
-                    userId:
-                      type: integer
-                      description: ユーザーID
-                    title:
-                      type: string
-                      description: アンケートタイトル
-                    description:
-                      type: string
-                      description: アンケート説明
-                    thumbnail_url:
-                      type: string
-                      description: サムネイルURL
-                    qreChoices:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          body:
-                            type: string
-                            description: 選択肢内容
-                          displayOrder:
-                            type: integer
-                            description: 選択肢順序
-                        required:
-                          - body
-                          - displayOrder
-                    tags:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            description: タグID
-                          name:
-                            type: string
-                            description: タグ名
-                        required:
-                          - id
-                          - name
+                userId:
+                  type: integer
+                  description: ユーザーID
+                title:
+                  type: string
+                  description: アンケートタイトル
+                description:
+                  type: string
+                  description: アンケート説明
+                thumbnail_url:
+                  type: string
+                  description: サムネイルURL
+                qreChoices:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      body:
+                        type: string
+                        description: 選択肢内容
+                      displayOrder:
+                        type: integer
+                        description: 選択肢順序
+                    required:
+                      - body
+                      - displayOrder
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+                    required:
+                      - id
+                      - name
               required:
-                - Questionnaire
+                - userId
+                - title
+                - description
+                - qreChoices
+                - tags
             examples:
               Example:
                 value:
-                  Questionnaire:
-                    userId: 12
-                    title: アンケートタイトルA
-                    description: アンケート説明文A
-                    thumbnail_url: ''
-                    qreChoices:
-                      - body: 選択肢内容A
-                        displayOrder: 1
-                      - body: 選択肢内容B
-                        displayOrder: 2
-                    tags:
-                      - id: 12
-                        name: アニメ
-                      - id: 34
-                        name: Youtube
+                  userId: 12
+                  title: アンケートタイトルA
+                  description: アンケート説明文A
+                  thumbnail_url: ''
+                  qreChoices:
+                    - body: 選択肢内容A
+                      displayOrder: 1
+                    - body: 選択肢内容B
+                      displayOrder: 2
+                  tags:
+                    - id: 12
+                      name: アニメ
+                    - id: 34
+                      name: Youtube
         description: アンケート情報
       tags:
         - アンケート
