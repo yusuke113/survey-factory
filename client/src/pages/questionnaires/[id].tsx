@@ -1,26 +1,26 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from 'next';
 import styles from '../../styles/Home.module.scss';
-import { QuestionnaireUseCase } from "../../usecase/questionnaireUseCase";
-import { Questionnaire } from "../../models/domain/questionnaire";
-import { QreChoice } from "../../models/domain/qreChoice";
-import { Tag } from "../../models/domain/tag";
+import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
+import { Questionnaire } from '../../models/domain/questionnaire';
+import { QreChoice } from '../../models/domain/qreChoice';
+import { Tag } from '../../models/domain/tag';
 
 type QuestionnaireDetailPage = {
-  questionnaire: Questionnaire,
-  qreChoices: QreChoice[],
-  tags: Tag[]
-}
+  questionnaire: Questionnaire;
+  qreChoices: QreChoice[];
+  tags: Tag[];
+};
 
 const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
   questionnaire,
   qreChoices,
-  tags
+  tags,
 }) => {
   return (
     <>
       <div className={styles.wrapper}>
         <section className={styles.questionnaire}>
-          <div className={styles.container}>
+          <div className={styles.md_container}>
             <h2 className={styles.heading_main}>{questionnaire.title}</h2>
             <p className={styles.questionnaire_description}>{questionnaire.description}</p>
             <div className={styles.tags}>
@@ -35,47 +35,57 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
             <div className={styles.result}>
               <div className={styles.result_bar}>
                 <div
-                    className={styles.result_1}
-                    style={{width: qreChoices[0].voteCount / questionnaire.voteCountAll * 100 + '%'}}
-                    >
-                    <span>
-                      {Math.round(qreChoices[0].voteCount / questionnaire.voteCountAll * 100)}%
-                    </span>
+                  className={styles.result_1}
+                  style={{
+                    width: (qreChoices[0].voteCount / questionnaire.voteCountAll) * 100 + '%',
+                  }}
+                >
+                  <span className={styles.number}>
+                    {Math.round((qreChoices[0].voteCount / questionnaire.voteCountAll) * 100)}
+                    <span className={styles.percent}>%</span>
+                  </span>
                 </div>
-                <div 
+                <div
                   className={styles.result_2}
-                  style={{width: qreChoices[1].voteCount / questionnaire.voteCountAll * 100 + '%'}}
-                  >
-                    <span>
-                      {Math.round(qreChoices[1].voteCount / questionnaire.voteCountAll * 100)}%
-                    </span>
+                  style={{
+                    width: (qreChoices[1].voteCount / questionnaire.voteCountAll) * 100 + '%',
+                  }}
+                >
+                  <span className={styles.number}>
+                    {Math.round((qreChoices[1].voteCount / questionnaire.voteCountAll) * 100)}
+                    <span className={styles.percent}>%</span>
+                  </span>
                 </div>
               </div>
             </div>
             <div className={styles.choices}>
-              <ul className={styles.choice_list}>
+              <form>
                 {qreChoices.map((qreChoice, key) => (
-                  <li key={key}>
-                    <p><b>qre_choice_id:</b> {qreChoice.id}</p>
-                    <p><b>選択肢:</b> {qreChoice.body}</p>
-                    <p><b>投票数:</b> {qreChoice.voteCount}</p>
-                  </li>
+                  <div className={styles.choice_row}>
+                    <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} />
+                    <label htmlFor={`choice_${qreChoice.id}`}>
+                      <p>{qreChoice.body}</p>
+                      <p style={{textAlign: 'right', color: '#1ca7a7', marginTop: 5, fontWeight: 'bold'}}>
+                        投票数: {qreChoice.voteCount}
+                      </p>
+                    </label>
+                  </div>
                 ))}
-              </ul>
+              </form>
             </div>
           </div>
         </section>
       </div>
     </>
   );
-}
+};
 
 export default QuestionnaireDetailPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params || {};
   const useCase = new QuestionnaireUseCase();
-  const {data} = await useCase.getQuestionnaire(+id!);
+  const { data } = await useCase.getQuestionnaire(+id!);
 
   console.log(data);
 
@@ -83,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       questionnaire: data.questionnaire,
       qreChoices: data.qreChoices,
-      tags: data.tags
-    }
-  }
-}
+      tags: data.tags,
+    },
+  };
+};

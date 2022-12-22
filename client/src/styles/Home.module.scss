@@ -70,6 +70,13 @@
   padding: 8px 0 40px;
 }
 
+.md_container {
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 32px 8px;
+}
+
 .questionnaire {
   background: #fff;
 
@@ -108,14 +115,19 @@
       height: 100%;
       background: #D26463;
 
-      span {
+      .number {
         position: absolute;
         z-index: 1;
         right: 100%;
         margin-right: 10px;
-        font-weight: bold;
-        font-size: 20px;
+        font-weight: 900;
+        font-size: 28px;
         color: #D26463;
+        
+        .percent {
+          font-size: 12px;
+          font-weight: 900;
+        }
       }
     }
     .result_2 {
@@ -125,29 +137,44 @@
       height: 100%;
       background: #1F4E78;
 
-      span {
+      .number {
         position: absolute;
         z-index: 1;
         left: 100%;
         margin-left: 10px;
         font-weight: bold;
-        font-size: 20px;
+        font-size: 28px;
         color: #1F4E78;
+
+        .percent {
+          font-size: 12px;
+          font-weight: 900;
+        }
       }
     }
   }
 
   .choices {
-    .choice_list {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      
-      li {
-        flex: 1;
+    .choice_row {
+      &:not(:first-child) {
+        margin-top: 5px;
+      }
+
+      input[type=radio] {
+        display: none;
+
+        &:checked + label {
+          border: 2px solid #a1d1d1;
+          background: #e0fdfd;
+        }
+      }
+
+      label {
+        display: block;
+        cursor: pointer;
         padding: 16px;
+        border: 2px solid #bbb;
         border-radius: 8px;
-        box-shadow: 0 2px 8px #5e5d406b;
       }
     }
   }
