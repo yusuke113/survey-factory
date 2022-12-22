@@ -23,6 +23,8 @@ return new class extends Migration
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('作成日時');
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->comment('削除日時');
+
+            $table->unique(['qre_choice_id', 'user_token'], 'idx_qre_votes_qre_choice_id_user_token');
         });
     }
 
