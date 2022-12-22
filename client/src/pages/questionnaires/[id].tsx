@@ -41,7 +41,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                   }}
                 >
                   <span className={styles.number}>
-                    {Math.round((qreChoices[0].voteCount / questionnaire.voteCountAll) * 100)}
+                    {Math.round((qreChoices[0].voteCount / questionnaire.voteCountAll) * 1000) / 10}
                     <span className={styles.percent}>%</span>
                   </span>
                 </div>
@@ -52,14 +52,14 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                   }}
                 >
                   <span className={styles.number}>
-                    {Math.round((qreChoices[1].voteCount / questionnaire.voteCountAll) * 100)}
+                    {Math.round((qreChoices[1].voteCount / questionnaire.voteCountAll) * 1000) / 10}
                     <span className={styles.percent}>%</span>
                   </span>
                 </div>
               </div>
             </div>
             <div className={styles.choices}>
-              <form>
+              <form id='choice_form'>
                 {qreChoices.map((qreChoice, key) => (
                   <div className={styles.choice_row}>
                     <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} />
@@ -71,6 +71,9 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                     </label>
                   </div>
                 ))}
+                <div className={styles.choice_button_row}>
+                  <input type="submit" value="投票する" className={styles.choice_button} />
+                </div>
               </form>
             </div>
           </div>
