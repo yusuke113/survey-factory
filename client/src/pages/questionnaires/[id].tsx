@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import styles from '../../styles/Home.module.scss';
+import { QreChoice } from '../../domain/models/qreChoice';
+import { Questionnaire } from '../../domain/models/questionnaire';
+import { Tag } from '../../domain/models/tag';
 import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
-import { Questionnaire } from '../../models/domain/questionnaire';
-import { QreChoice } from '../../models/domain/qreChoice';
-import { Tag } from '../../models/domain/tag';
 
 type QuestionnaireDetailPage = {
   questionnaire: Questionnaire;
@@ -61,7 +61,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
             <div className={styles.choices}>
               <form id='choice_form'>
                 {qreChoices.map((qreChoice, key) => (
-                  <div className={styles.choice_row}>
+                  <div className={styles.choice_row} key={key}>
                     <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} />
                     <label htmlFor={`choice_${qreChoice.id}`}>
                       <p>{qreChoice.body}</p>
@@ -88,9 +88,8 @@ export default QuestionnaireDetailPage;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params || {};
   const useCase = new QuestionnaireUseCase();
+  
   const { data } = await useCase.getQuestionnaire(+id!);
-
-  console.log(data);
 
   return {
     props: {

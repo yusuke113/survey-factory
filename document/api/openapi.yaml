@@ -269,14 +269,14 @@ paths:
                         - body
                         - voteCount
                   tags:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: タグID
-                      name:
-                        type: string
-                        description: タグ名
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
                 required:
                   - questionnaire
                   - qreChoices
@@ -302,9 +302,9 @@ paths:
                         voteCount: 50
                     tags:
                       - id: 12
-                        body: アニメ
+                        name: アニメ
                       - id: 34
-                        body: Youtube
+                        name: Youtube
         '400':
           description: バリデーション失敗
           content:
@@ -366,36 +366,44 @@ paths:
                   message:
                     type: object
                     properties:
+                      userId:
+                        type: string
                       title:
                         type: string
-                        description: アンケートタイトル
                       description:
                         type: string
-                        description: アンケート説明
                       thumbnail_url:
                         type: string
-                        description: サムネイルURL
                       qreChoices:
                         type: object
                         properties:
                           body:
                             type: string
-                            description: 選択肢内容
                           displayOrder:
                             type: string
-                            description: 選択肢順序
+                      tags:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
                 required:
                   - message
               examples:
                 Example:
                   value:
                     message:
+                      userId: ユーザーIDは整数で指定してください。
                       title: タイトルは、255文字以下で指定してください。
                       description: アンケートの説明は必ず指定してください。
                       thumbnail_url: サムネイルに正しい形式を指定してください。
                       qreChoices:
                         body: 選択肢は必ず指定してください。
                         displayOrder: 設問順序は、整数で指定してください。
+                      tags:
+                        id: タグIDは整数で指定してください。
+                        name: タグ名は必ず指定してください。
         '401':
           description: トークンまたは認証情報が不正
           content:
@@ -419,10 +427,15 @@ paths:
                 Questionnaire:
                   type: object
                   required:
+                    - userId
                     - title
                     - description
                     - qreChoices
+                    - tags
                   properties:
+                    userId:
+                      type: integer
+                      description: ユーザーID
                     title:
                       type: string
                       description: アンケートタイトル
@@ -446,12 +459,27 @@ paths:
                         required:
                           - body
                           - displayOrder
+                    tags:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: タグID
+                          name:
+                            type: string
+                            description: タグ名
+                        required:
+                          - id
+                          - name
               required:
                 - Questionnaire
             examples:
               Example:
                 value:
                   Questionnaire:
+                    userId: 12
                     title: アンケートタイトルA
                     description: アンケート説明文A
                     thumbnail_url: ''
@@ -460,6 +488,11 @@ paths:
                         displayOrder: 1
                       - body: 選択肢内容B
                         displayOrder: 2
+                    tags:
+                      - id: 12
+                        name: アニメ
+                      - id: 34
+                        name: Youtube
         description: アンケート情報
       tags:
         - アンケート
