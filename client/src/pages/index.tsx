@@ -1,13 +1,18 @@
 import { GetServerSideProps, NextPage } from "next";
 import styles from '../styles/Home.module.scss';
 import { QuestionnaireUseCase } from '../usecase/questionnaireUseCase';
-import { QuestionnaireRankingList } from "../models/domain/questionnaire/types";
+import { Questionnaire } from "../models/domain/questionnaire";
+import { Pager } from "../models/domain/pager";
+import Link from "next/link";
 
 type HomePage = {
-  questionnaireRankingList: QuestionnaireRankingList;
+  questionnaires: Questionnaire[]
+  pager: Pager
 }
 
-const Home: NextPage<HomePage> = ({ questionnaireRankingList }) => {
+const Home: NextPage<HomePage> = ({ questionnaires, pager}) => {
+  console.log(questionnaires);
+  
   return (
     <>
       <div className={styles.main_visual}>
@@ -19,9 +24,9 @@ const Home: NextPage<HomePage> = ({ questionnaireRankingList }) => {
           <h2 className={styles.heading_main}>ランキング</h2>
           <div className={styles.ranking}>
             <ul className={styles.ranking_list}>
-              {questionnaireRankingList.questionnaires.map((questionnaire, key) => (
+              {questionnaires.map((questionnaire, key) => (
                 <li key={key}>
-                  <a href="#">
+                  <Link href={`/questionnaires/${questionnaire.id}`}>
                     <div className={styles.thumbnail}>
                       <p>{questionnaire.title}</p>
                     </div>
@@ -31,7 +36,7 @@ const Home: NextPage<HomePage> = ({ questionnaireRankingList }) => {
                       {questionnaire.description}
                       </p>
                     </div>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -50,7 +55,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
-      questionnaireRankingList: data
+      questionnaires: data.questionnaires,
+      pager: data.pager
     }
   }
 }

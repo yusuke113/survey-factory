@@ -18,4 +18,14 @@ export class QuestionnaireRepository {
     });
     return response;
   }
+
+  /**
+   * 
+   * @param {number} questionnaireId 
+   * @returns {Object}
+   */
+  async fetchQuestionnaire(questionnaireId: number) {
+    const response = await $axios.get(`${BASE_URL}questionnaires/${questionnaireId}`);
+    return response;
+  }
 }

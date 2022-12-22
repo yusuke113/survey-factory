@@ -36,4 +36,4 @@ docker-compose exec api php artisan route:list
 ```
 
 ## API仕様書
-https://github.com/yusuke113/survey-factory/blob/main/document/api/openapi.yaml
+https://github.com/yusuke113/survey-factory/blob/develop/document/api/openapi.yaml
