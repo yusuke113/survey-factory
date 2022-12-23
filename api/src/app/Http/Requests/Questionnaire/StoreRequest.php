@@ -77,11 +77,11 @@ final class StoreRequest extends FormRequest
                 'array',
             ],
             'tags.*.id' => [
-                'required',
+                'nullable',
                 'integer',
             ],
             'tags.*.name' => [
-                'required',
+                'nullable',
                 'string',
                 'max:' . Name::MAX_LENGTH,
             ],

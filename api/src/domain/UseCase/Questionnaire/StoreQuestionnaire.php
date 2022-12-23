@@ -44,6 +44,8 @@ final class StoreQuestionnaire
             $title,
             $description,
             $thumbnailUrl,
+            $qreChoices,
+            $tags
         );
 
         return (new SingleMessagePresenter(__('expectation.created.message')))->toArray();

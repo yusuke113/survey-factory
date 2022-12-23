@@ -37,7 +37,16 @@ interface QuestionnaireRepositoryInterface
      * @param string $title
      * @param string $description
      * @param string|null $thumbnailUrl
+     * @param array $qreChoices
+     * @param array $tags
      * @return void
      */
-    public function save(int $userId, string $title, string $description, ?string $thumbnailUrl): void;
+    public function save(
+        int $userId,
+        string $title,
+        string $description,
+        ?string $thumbnailUrl,
+        array $qreChoices,
+        array $tags
+    ): void;
 }
