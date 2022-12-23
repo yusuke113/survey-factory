@@ -461,9 +461,6 @@ paths:
                       name:
                         type: string
                         description: タグ名
-                    required:
-                      - id
-                      - name
               required:
                 - userId
                 - title
