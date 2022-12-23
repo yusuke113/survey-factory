@@ -17,8 +17,9 @@ final class GetRankingList
      *
      * @param QuestionnaireRepositoryInterface $questionnaireRepository
      */
-    public function __construct(private QuestionnaireRepositoryInterface $questionnaireRepository)
-    {
+    public function __construct(
+        private QuestionnaireRepositoryInterface $questionnaireRepository
+    ) {
     }
 
     /**

@@ -7,6 +7,7 @@ namespace App\Adapter\Gateway;
 use App\Models\Questionnaire;
 use Domain\Repository\QuestionnaireRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 /**
  * QuestionnaireRepository class
@@ -27,6 +28,28 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     public function findById(int $questionnaireId): ?Questionnaire
     {
         return Questionnaire::withCount('qreVotes')->find($questionnaireId);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function save(
+        int $userId,
+        string $title,
+        string $description,
+        ?string $thumbnailUrl
+    ): void {
+        $questionnaire = new Questionnaire();
+        $questionnaire->uuid = (string) Str::uuid();
+        $questionnaire->user_id = $userId;
+        $questionnaire->title = $title;
+        $questionnaire->description = $description;
+        if(!is_null($thumbnailUrl)) {
+            $questionnaire->thumbnail_url = $thumbnailUrl;
+        }
+
+        $questionnaire->save();
     }
 
     /**
