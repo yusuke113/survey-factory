@@ -26,12 +26,12 @@ final class Store extends Controller
         StoreRequest $request
     ): JsonResponse {
         return response()->json($useCase(
-                $request->int('userId'),
-                $request->input('title'),
-                $request->input('description'),
-                $request->input('thumbnailUrl'),
-                $request->input('qreChoices'),
-                $request->input('tags'),
-            ));
+            $request->int('userId'),
+            $request->input('title'),
+            $request->input('description'),
+            $request->input('thumbnailUrl'),
+            $request->input('qreChoices'),
+            $request->input('tags'),
+        ));
     }
 }

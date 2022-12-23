@@ -77,7 +77,7 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
         $questionnaire->user_id = $userId;
         $questionnaire->title = $title;
         $questionnaire->description = $description;
-        if(!is_null($thumbnailUrl)) {
+        if (!is_null($thumbnailUrl)) {
             $questionnaire->thumbnail_url = $thumbnailUrl;
         }
 
