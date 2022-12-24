@@ -125,6 +125,10 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
         Questionnaire $questionnaire,
         array $tags
     ): void {
+        // INFO: タグの数が3つより多い場合配列の上から3つに絞り込み
+        if (count($tags) > 3) {
+            $tags = array_slice($tags, 0, 3);
+        }
         $tagIds = array_column($tags, 'id');
         $questionnaire->tags()->sync($tagIds);
     }

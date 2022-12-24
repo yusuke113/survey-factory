@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Domain\UseCase\Questionnaire;
 
 use App\Adapter\Presenter\SingleMessagePresenter;
+use Domain\Exception\NotFoundException;
 use Domain\Repository\QuestionnaireRepositoryInterface;
+use Domain\Repository\UserRepositoryInterface;
 
 /**
  * StoreQuestionnaire class
@@ -16,9 +18,11 @@ final class StoreQuestionnaire
      * コンストラクタ
      *
      * @param QuestionnaireRepositoryInterface $questionnaireRepository
+     * @param UserRepositoryInterface $userRepository
      */
     public function __construct(
-        private QuestionnaireRepositoryInterface $questionnaireRepository
+        private QuestionnaireRepositoryInterface $questionnaireRepository,
+        private UserRepositoryInterface $userRepository,
     ) {
     }
 
@@ -39,6 +43,12 @@ final class StoreQuestionnaire
         array $qreChoices,
         array $tags,
     ): array {
+        $user = $this->userRepository->findById($userId);
+
+        if (is_null($user)) {
+            throw new NotFoundException(__('exception.not_found.attributes.user'));
+        }
+
         $this->questionnaireRepository->save(
             $userId,
             $title,
