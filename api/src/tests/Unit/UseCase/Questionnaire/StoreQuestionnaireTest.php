@@ -8,6 +8,7 @@ use App\Models\QreChoice;
 use App\Models\Questionnaire;
 use App\Models\Tag;
 use App\Models\User;
+use Domain\Exception\NotFoundException;
 use Domain\UseCase\Questionnaire\StoreQuestionnaire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
@@ -45,6 +46,10 @@ class StoreQuestionnaireTest extends TestCase
         [
             'id' => 3,
             'name' => 'Youtube',
+        ],
+        [
+            'id' => 4,
+            'name' => 'ポケモン',
         ],
     ];
 
@@ -278,6 +283,190 @@ class StoreQuestionnaireTest extends TestCase
                         'id' => self::TAGS[1]['id'],
                         'name' => self::TAGS[1]['name'],
                     ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider タグが4つ以上ある場合に上から3つだけ保存されること_provider
+     *
+     * @return void
+     */
+    public function タグが4つ以上ある場合に上から3つだけ保存されること($input, $expected): void
+    {
+        ($this->useCase)(...$input);
+
+        $actual = Questionnaire::latest()->first()->tags->map(
+            fn (Tag $tag): array => Arr::only($tag->toArray(), array_keys($expected[0]))
+        )->all();
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function タグが4つ以上ある場合に上から3つだけ保存されること_provider(): array
+    {
+        return [
+            '正常系' => [
+                '入力値' => [
+                    'userId' => self::USER['id'],
+                    'title' => 'アンケートタイトルA',
+                    'description' => 'アンケート説明文A',
+                    'thumbnailUrl' => 'https://test.jpg',
+                    'qreChoices' => [
+                        [
+                          'body' => '選択肢内容A',
+                          'displayOrder' => 1
+                        ],
+                        [
+                          'body' => '選択肢内容B',
+                          'displayOrder' => 2,
+                        ],
+                    ],
+                    'tags' => [
+                        [
+                            'id' => self::TAGS[0]['id'],
+                            'name' => self::TAGS[0]['name'],
+                        ],
+                        [
+                            'id' => self::TAGS[1]['id'],
+                            'name' => self::TAGS[1]['name'],
+                        ],
+                        [
+                            'id' => self::TAGS[2]['id'],
+                            'name' => self::TAGS[2]['name'],
+                        ],
+                        [
+                            'id' => self::TAGS[3]['id'],
+                            'name' => self::TAGS[3]['name'],
+                        ],
+                    ],
+                ],
+                '期待値' => [
+                    [
+                        'id' => self::TAGS[0]['id'],
+                        'name' => self::TAGS[0]['name'],
+                    ],
+                    [
+                        'id' => self::TAGS[1]['id'],
+                        'name' => self::TAGS[1]['name'],
+                    ],
+                    [
+                        'id' => self::TAGS[2]['id'],
+                        'name' => self::TAGS[2]['name'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider アンケート登録処理成功時のレスポンスが正しいこと_provider
+     *
+     * @return void
+     */
+    public function アンケート登録処理成功時のレスポンスが正しいこと($input, $expected): void
+    {
+        $actual = ($this->useCase)(...$input);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function アンケート登録処理成功時のレスポンスが正しいこと_provider(): array
+    {
+        return [
+            '正常系' => [
+                '入力値' => [
+                    'userId' => self::USER['id'],
+                    'title' => 'アンケートタイトルA',
+                    'description' => 'アンケート説明文A',
+                    'thumbnailUrl' => 'https://test.jpg',
+                    'qreChoices' => [
+                        [
+                          'body' => '選択肢内容A',
+                          'displayOrder' => 1
+                        ],
+                        [
+                          'body' => '選択肢内容B',
+                          'displayOrder' => 2,
+                        ],
+                    ],
+                    'tags' => [
+                        [
+                            'id' => self::TAGS[0]['id'],
+                            'name' => self::TAGS[0]['name'],
+                        ],
+                        [
+                            'id' => self::TAGS[1]['id'],
+                            'name' => self::TAGS[1]['name'],
+                        ],
+                    ],
+                ],
+                '期待値' => [
+                    'message' => '登録が完了しました。',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider 存在しないユーザーIDが指定された場合例外が発生すること_provider
+     *
+     * @return void
+     */
+    public function 存在しないユーザーIDが指定された場合例外が発生すること($input, $expected): void
+    {
+        $this->expectException($expected['exceptionClass']);
+        $this->expectExceptionMessage($expected['message']);
+
+        ($this->useCase)(...$input);
+    }
+
+    /**
+     * @return array
+     */
+    public function 存在しないユーザーIDが指定された場合例外が発生すること_provider(): array
+    {
+        return [
+            '正常系' => [
+                '入力値' => [
+                    'userId' => 33, // 存在しないユーザーID
+                    'title' => 'アンケートタイトルA',
+                    'description' => 'アンケート説明文A',
+                    'thumbnailUrl' => 'https://test.jpg',
+                    'qreChoices' => [
+                        [
+                          'body' => '選択肢内容A',
+                          'displayOrder' => 1
+                        ],
+                        [
+                          'body' => '選択肢内容B',
+                          'displayOrder' => 2,
+                        ],
+                    ],
+                    'tags' => [
+                        [
+                            'id' => self::TAGS[0]['id'],
+                            'name' => self::TAGS[0]['name'],
+                        ],
+                        [
+                            'id' => self::TAGS[1]['id'],
+                            'name' => self::TAGS[1]['name'],
+                        ],
+                    ],
+                ],
+                '期待値' => [
+                    'exceptionClass' => NotFoundException::class,
+                    'message' => 'ユーザーが存在しません。',
                 ],
             ],
         ];
