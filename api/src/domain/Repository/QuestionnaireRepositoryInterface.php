@@ -29,4 +29,24 @@ interface QuestionnaireRepositoryInterface
      * @return Questionnaire|null
      */
     public function findById(int $questionnaireId): ?Questionnaire;
+
+    /**
+     * アンケートを登録する
+     *
+     * @param int $userId
+     * @param string $title
+     * @param string $description
+     * @param string|null $thumbnailUrl
+     * @param array $qreChoices
+     * @param array $tags
+     * @return void
+     */
+    public function save(
+        int $userId,
+        string $title,
+        string $description,
+        ?string $thumbnailUrl,
+        array $qreChoices,
+        array $tags
+    ): void;
 }

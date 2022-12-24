@@ -10,6 +10,7 @@ return [
     'not_found' => [
         'message' => ':attributeが存在しません。',
         'attributes' => [
+            'user' => 'ユーザー',
             'page' => 'ページ',
             'questionnaire' => 'アンケート',
         ],

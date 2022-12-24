@@ -39,7 +39,9 @@ final class GetQuestionnairePresenter
                 'id' => $this->questionnaire->id,
                 'title' => $this->questionnaire->title,
                 'description' => $this->questionnaire->description,
-                'thumbnailUrl' => $this->questionnaire->thumbnail_url,
+                'thumbnailUrl' => is_null($this->questionnaire->thumbnail_url)
+                    ? ''
+                    : $this->questionnaire->thumbnail_url,
                 'createdAt' => (new Carbon($this->questionnaire->created_at))->toDateTimeString(),
                 'voteCountAll' => $this->questionnaire->qre_votes_count,
                 'user' => [

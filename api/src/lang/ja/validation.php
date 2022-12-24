@@ -154,12 +154,22 @@ return [
     */
 
     'attributes' => [
+        'userId' => 'ユーザーID',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'type' => 'ランキング種類',
         'page' => 'ページ番号',
         'limit' => '取得件数',
-        'questionnaireId' => 'アンケートID'
+        'questionnaireId' => 'アンケートID',
+        'title' => 'アンケートタイトル',
+        'description' => 'アンケート説明',
+        'thumbnailUrl' => 'サムネイルURL',
+        'qreChoices' => '選択肢',
+        'qreChoices.*.body' => '選択肢の内容',
+        'qreChoices.*.displayOrder' => '選択肢順序',
+        'tags' => 'タグ',
+        'tags.*.id' => 'タグID',
+        'tags.*.name' => 'タグ名',
     ],
 
 ];
