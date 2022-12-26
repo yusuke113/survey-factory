@@ -104,12 +104,15 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
         int $questionnaireId,
         array $inputQreChoices
     ): void {
-        foreach ($inputQreChoices as $inputQreChoice) {
+        // INFO: displayOrderの値の昇順で並び替え
+        array_multisort(array_column($inputQreChoices, 'displayOrder'), SORT_ASC, $inputQreChoices);
+
+        foreach ($inputQreChoices as $index => $inputQreChoice) {
             $qreChoice = new QreChoice();
             $qreChoice->uuid = (string) Str::uuid();
             $qreChoice->questionnaire_id = $questionnaireId;
             $qreChoice->body = $inputQreChoice['body'];
-            $qreChoice->display_order = $inputQreChoice['displayOrder'];
+            $qreChoice->display_order = ++$index; // foreachの中で順番を振り直す
             $qreChoice->save();
         }
     }
