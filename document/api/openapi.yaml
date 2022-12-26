@@ -178,20 +178,7 @@ paths:
                       id: 33
                       name: テストユーザー
         '401':
-          description: トークンまたは認証情報が不正
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message: 認証に失敗しました。
+          $ref: '#/components/responses/Unauthorized'
       description: アンケート作成画面情報を返却する
       parameters: []
       tags:
@@ -405,18 +392,7 @@ paths:
                         id: タグIDは整数で指定してください。
                         name: タグ名は必ず指定してください。
         '401':
-          description: トークンまたは認証情報が不正
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              examples:
-                Example:
-                  value:
-                    message: 認証に失敗しました。
+          $ref: '#/components/responses/Unauthorized'
       description: アンケートを登録する
       requestBody:
         content:
@@ -591,9 +567,88 @@ paths:
                   choiceId: 33
                   userToken: agNQYWjc6ypVT45stPkrMrOv
         description: アンケート投票情報
+  /api/v1/tags/create:
+    parameters: []
+    post:
+      summary: タグ登録
+      operationId: post-api-v1-tags-create
+      responses:
+        '200':
+          description: タグ名一致するタグの返却成功またはタグの登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+              examples:
+                Example:
+                  value:
+                    id: 3
+                    name: アニメ
+        '400':
+          description: バリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    required:
+                      - name
+                    properties:
+                      name:
+                        type: string
+                required:
+                  - message
+              examples:
+                Example 1:
+                  value:
+                    message:
+                      name: タグ名は必ず指定してください。
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: タグ名
+              required:
+                - name
+            examples:
+              Example:
+                value:
+                  name: アニメ
+        description: ''
+      tags:
+        - タグ
+      description: タグ名に一致するタグ情報を返却またはタグ登録して返却
 components:
   schemas: {}
+  responses:
+    Unauthorized:
+      description: トークンまたはログインユーザー情報が不正
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          examples:
+            Example:
+              value:
+                message: 認証に失敗しました。
 tags:
+  - name: ユーザー
   - name: アンケート
   - name: アンケート投票
-  - name: ユーザー
+  - name: タグ
