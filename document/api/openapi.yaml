@@ -567,11 +567,11 @@ paths:
                   choiceId: 33
                   userToken: agNQYWjc6ypVT45stPkrMrOv
         description: アンケート投票情報
-  /api/v1/tags/create:
+  /api/v1/tags:
     parameters: []
     post:
       summary: タグ登録
-      operationId: post-api-v1-tags-create
+      operationId: post-api-v1-tags
       responses:
         '200':
           description: タグ名一致するタグの返却成功またはタグの登録成功
