@@ -372,7 +372,7 @@ paths:
                         type: string
                       description:
                         type: string
-                      thumbnail_url:
+                      thumbnailUrl:
                         type: string
                       qreChoices:
                         type: object
@@ -397,7 +397,7 @@ paths:
                       userId: ユーザーIDは整数で指定してください。
                       title: タイトルは、255文字以下で指定してください。
                       description: アンケートの説明は必ず指定してください。
-                      thumbnail_url: サムネイルに正しい形式を指定してください。
+                      thumbnailUrl: サムネイルに正しい形式を指定してください。
                       qreChoices:
                         body: 選択肢は必ず指定してください。
                         displayOrder: 設問順序は、整数で指定してください。
@@ -433,7 +433,7 @@ paths:
                 description:
                   type: string
                   description: アンケート説明
-                thumbnail_url:
+                thumbnailUrl:
                   type: string
                   description: サムネイルURL
                 qreChoices:
@@ -461,9 +461,6 @@ paths:
                       name:
                         type: string
                         description: タグ名
-                    required:
-                      - id
-                      - name
               required:
                 - userId
                 - title
@@ -476,7 +473,7 @@ paths:
                   userId: 12
                   title: アンケートタイトルA
                   description: アンケート説明文A
-                  thumbnail_url: ''
+                  thumbnailUrl: ''
                   qreChoices:
                     - body: 選択肢内容A
                       displayOrder: 1

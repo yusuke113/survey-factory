@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Adapter\Gateway\QuestionnaireRepository;
+use App\Adapter\Gateway\UserRepository;
 use Domain\Repository\QuestionnaireRepositoryInterface;
+use Domain\Repository\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -18,6 +20,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(QuestionnaireRepositoryInterface::class, QuestionnaireRepository::class);
     }
 

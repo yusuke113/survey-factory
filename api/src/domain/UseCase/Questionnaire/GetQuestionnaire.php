@@ -18,8 +18,9 @@ final class GetQuestionnaire
      *
      * @param QuestionnaireRepositoryInterface $questionnaireRepository
      */
-    public function __construct(private QuestionnaireRepositoryInterface $questionnaireRepository)
-    {
+    public function __construct(
+        private QuestionnaireRepositoryInterface $questionnaireRepository
+    ) {
     }
 
     /**

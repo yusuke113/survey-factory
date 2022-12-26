@@ -29,7 +29,6 @@ class QreChoiceFactory extends Factory
     public function definition()
     {
         $dateTime = fake()->dateTimeThisYear(timezone: 'Asia/Tokyo');
-        $QuestionnaireIds = Questionnaire::all()->pluck('id')->toArray();
         return [
             'uuid' => (string) Str::uuid(),
             'questionnaire_id' => 1,
