@@ -21,6 +21,9 @@ Route::as('api.')->group(function () {
             Route::post('/ranking', 'GetRanking')->name('ranking');
             Route::get('/{questionnaireId}', 'Show')->name('show');
         });
+        Route::prefix('tags')->namespace('Tag')->as('tag.')->group(function () {
+            Route::post('/', 'Store')->name('store');
+        });
     });
 
     /**

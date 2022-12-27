@@ -73,7 +73,7 @@ final class StoreRequest extends FormRequest
                 'min:' . DisplayOrder::MIN_VALUE,
             ],
             'tags' => [
-                'required',
+                'nullable',
                 'array',
             ],
             'tags.*.id' => [
