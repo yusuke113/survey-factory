@@ -67,7 +67,7 @@ paths:
                 required:
                   - questionnaires
               examples:
-                example:
+                Example:
                   value:
                     questionnaires:
                       - id: 123
@@ -268,7 +268,7 @@ paths:
                   - questionnaire
                   - qreChoices
               examples:
-                example:
+                Example:
                   value:
                     questionnaire:
                       id: 222
@@ -292,6 +292,26 @@ paths:
                         name: アニメ
                       - id: 34
                         name: Youtube
+                タグが付与されていない場合:
+                  value:
+                    questionnaire:
+                      id: 222
+                      title: アンケートタイトルA
+                      description: アンケート説明文A
+                      thumbnailUrl: 'https://images1.png'
+                      createdAt: '2022-10-01 00:00:00'
+                      voteCountAll: 150
+                      user:
+                        id: 33
+                        name: テストユーザー
+                    qreChoices:
+                      - id: 123
+                        body: 選択肢内容A
+                        voteCount: 100
+                      - id: 456
+                        body: 選択肢内容B
+                        voteCount: 50
+                    tags: []
         '400':
           description: バリデーション失敗
           content:
@@ -322,7 +342,7 @@ paths:
                 required:
                   - message
               examples:
-                example:
+                Example:
                   value:
                     message: アンケートが存在しません。
       description: アンケートプレイ画面の詳細を返却
@@ -343,6 +363,19 @@ paths:
       responses:
         '201':
           description: 登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message: 登録が完了しました。
         '400':
           description: バリデーションエラー
           content:
@@ -460,6 +493,18 @@ paths:
                       name: アニメ
                     - id: 34
                       name: Youtube
+              タグが付与されていない場合:
+                value:
+                  userId: 12
+                  title: アンケートタイトルA
+                  description: アンケート説明文A
+                  thumbnailUrl: ''
+                  qreChoices:
+                    - body: 選択肢内容A
+                      displayOrder: 1
+                    - body: 選択肢内容B
+                      displayOrder: 2
+                  tags: []
         description: アンケート情報
       tags:
         - アンケート
@@ -478,6 +523,8 @@ paths:
                 properties:
                   message:
                     type: string
+                required:
+                  - message
               examples:
                 Example:
                   value:
@@ -584,6 +631,9 @@ paths:
                     type: integer
                   name:
                     type: string
+                required:
+                  - id
+                  - name
               examples:
                 Example:
                   value:
@@ -606,7 +656,7 @@ paths:
                 required:
                   - message
               examples:
-                Example 1:
+                Example:
                   value:
                     message:
                       name: タグ名は必ず指定してください。
@@ -643,6 +693,8 @@ components:
             properties:
               message:
                 type: string
+            required:
+              - message
           examples:
             Example:
               value:
