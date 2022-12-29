@@ -14,5 +14,5 @@ final class UserToken
      *
      * @var int
      */
-    public const MAX_LENGTH = 36;
+    public const MAX_LENGTH = 24;
 }

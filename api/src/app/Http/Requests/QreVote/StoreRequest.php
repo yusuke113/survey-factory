@@ -42,11 +42,6 @@ final class StoreRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'userToken' => [
-                'required',
-                'string',
-                'max:' . UserToken::MAX_LENGTH,
-            ],
         ];
     }
 }
