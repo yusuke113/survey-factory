@@ -23,13 +23,13 @@ final class GetRankingList
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      * @param int $page
      * @param int $limit
      * @return array
      */
     public function __invoke(
-        string $type,
+        ?string $type,
         int $page,
         int $limit,
     ): array {

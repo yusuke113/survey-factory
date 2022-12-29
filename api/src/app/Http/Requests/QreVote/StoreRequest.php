@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Questionnaire;
+namespace App\Http\Requests\QreVote;
 
 use App\Http\Requests\Traits\Castable;
 use App\Http\Requests\Traits\SingleValidationMessage;
-use Domain\Constant\Limit;
-use Domain\Constant\Page;
+use Domain\Constant\User\UserToken;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * GetRankingRequest class
+ * StoreRequest class
  */
-final class GetRankingRequest extends FormRequest
+final class StoreRequest extends FormRequest
 {
     use Castable, SingleValidationMessage;
 
@@ -35,19 +34,13 @@ final class GetRankingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [
-                'nullable',
-                'string',
-            ],
-            'page' => [
+            'questionnaireId' => [
                 'required',
                 'integer',
-                'min:' . Page::MIN_LENGTH,
             ],
-            'limit' => [
+            'choiceId' => [
                 'required',
                 'integer',
-                'min:' . Limit::MIN_LENGTH,
             ],
         ];
     }

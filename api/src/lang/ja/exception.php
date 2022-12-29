@@ -13,6 +13,10 @@ return [
             'user' => 'ユーザー',
             'page' => 'ページ',
             'questionnaire' => 'アンケート',
+            'qreChoice' => '選択肢',
         ],
+    ],
+    'duplicate_qre_vote' => [
+        'message' => '既に投票済みです。',
     ],
 ];

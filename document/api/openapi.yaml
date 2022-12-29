@@ -147,43 +147,159 @@ paths:
                   page: 1
                   limit: 10
     parameters: []
-  /api/v1/questionnaires/create:
-    get:
-      summary: アンケート作成画面情報取得
-      operationId: get-api-v1-questionnaires-create
+  /api/v1/questionnaires/:
+    parameters: []
+    post:
+      summary: アンケート登録
+      operationId: post-api-v1-questionnaires
       responses:
-        '200':
-          description: アンケート作成画面情報返却成功
+        '201':
+          description: 登録成功
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  user:
-                    type: object
-                    required:
-                      - id
-                      - name
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
+                  message:
+                    type: string
                 required:
-                  - user
+                  - message
               examples:
                 Example:
                   value:
-                    user:
-                      id: 33
-                      name: テストユーザー
+                    message: 登録が完了しました。
+        '400':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      thumbnailUrl:
+                        type: string
+                      qreChoices:
+                        type: object
+                        properties:
+                          body:
+                            type: string
+                          displayOrder:
+                            type: string
+                      tags:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                required:
+                  - message
+              examples:
+                Example:
+                  value:
+                    message:
+                      userId: ユーザーIDは整数で指定してください。
+                      title: タイトルは、255文字以下で指定してください。
+                      description: アンケートの説明は必ず指定してください。
+                      thumbnailUrl: サムネイルに正しい形式を指定してください。
+                      qreChoices:
+                        body: 選択肢は必ず指定してください。
+                        displayOrder: 設問順序は、整数で指定してください。
+                      tags:
+                        id: タグIDは整数で指定してください。
+                        name: タグ名は必ず指定してください。
         '401':
           $ref: '#/components/responses/Unauthorized'
-      description: アンケート作成画面情報を返却する
-      parameters: []
+      description: アンケートを登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: ユーザーID
+                title:
+                  type: string
+                  description: アンケートタイトル
+                description:
+                  type: string
+                  description: アンケート説明
+                thumbnailUrl:
+                  type: string
+                  description: サムネイルURL
+                qreChoices:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      body:
+                        type: string
+                        description: 選択肢内容
+                      displayOrder:
+                        type: integer
+                        description: 選択肢順序
+                    required:
+                      - body
+                      - displayOrder
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+              required:
+                - userId
+                - title
+                - description
+                - qreChoices
+                - tags
+            examples:
+              Example:
+                value:
+                  userId: 12
+                  title: アンケートタイトルA
+                  description: アンケート説明文A
+                  thumbnailUrl: ''
+                  qreChoices:
+                    - body: 選択肢内容A
+                      displayOrder: 1
+                    - body: 選択肢内容B
+                      displayOrder: 2
+                  tags:
+                    - id: 12
+                      name: アニメ
+                    - id: 34
+                      name: Youtube
+              タグが付与されていない場合:
+                value:
+                  userId: 12
+                  title: アンケートタイトルA
+                  description: アンケート説明文A
+                  thumbnailUrl: ''
+                  qreChoices:
+                    - body: 選択肢内容A
+                      displayOrder: 1
+                    - body: 選択肢内容B
+                      displayOrder: 2
+                  tags: []
+        description: アンケート情報
       tags:
         - アンケート
-    parameters: []
   '/api/v1/questionnaires/{questionnaireId}':
     get:
       summary: アンケートプレイ画面詳細取得
@@ -355,164 +471,11 @@ paths:
         name: questionnaireId
         in: path
         required: true
-  /api/v1/questionnaires/:
-    parameters: []
-    post:
-      summary: アンケート登録
-      operationId: post-api-v1-questionnaires
-      responses:
-        '201':
-          description: 登録成功
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message: 登録が完了しました。
-        '400':
-          description: バリデーションエラー
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      userId:
-                        type: string
-                      title:
-                        type: string
-                      description:
-                        type: string
-                      thumbnailUrl:
-                        type: string
-                      qreChoices:
-                        type: object
-                        properties:
-                          body:
-                            type: string
-                          displayOrder:
-                            type: string
-                      tags:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message:
-                      userId: ユーザーIDは整数で指定してください。
-                      title: タイトルは、255文字以下で指定してください。
-                      description: アンケートの説明は必ず指定してください。
-                      thumbnailUrl: サムネイルに正しい形式を指定してください。
-                      qreChoices:
-                        body: 選択肢は必ず指定してください。
-                        displayOrder: 設問順序は、整数で指定してください。
-                      tags:
-                        id: タグIDは整数で指定してください。
-                        name: タグ名は必ず指定してください。
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-      description: アンケートを登録する
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  description: ユーザーID
-                title:
-                  type: string
-                  description: アンケートタイトル
-                description:
-                  type: string
-                  description: アンケート説明
-                thumbnailUrl:
-                  type: string
-                  description: サムネイルURL
-                qreChoices:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      body:
-                        type: string
-                        description: 選択肢内容
-                      displayOrder:
-                        type: integer
-                        description: 選択肢順序
-                    required:
-                      - body
-                      - displayOrder
-                tags:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        description: タグID
-                      name:
-                        type: string
-                        description: タグ名
-              required:
-                - userId
-                - title
-                - description
-                - qreChoices
-                - tags
-            examples:
-              Example:
-                value:
-                  userId: 12
-                  title: アンケートタイトルA
-                  description: アンケート説明文A
-                  thumbnailUrl: ''
-                  qreChoices:
-                    - body: 選択肢内容A
-                      displayOrder: 1
-                    - body: 選択肢内容B
-                      displayOrder: 2
-                  tags:
-                    - id: 12
-                      name: アニメ
-                    - id: 34
-                      name: Youtube
-              タグが付与されていない場合:
-                value:
-                  userId: 12
-                  title: アンケートタイトルA
-                  description: アンケート説明文A
-                  thumbnailUrl: ''
-                  qreChoices:
-                    - body: 選択肢内容A
-                      displayOrder: 1
-                    - body: 選択肢内容B
-                      displayOrder: 2
-                  tags: []
-        description: アンケート情報
-      tags:
-        - アンケート
-  /api/v1/questionnaires/votes:
+  /api/v1/votes:
     parameters: []
     post:
       summary: アンケート投票登録
-      operationId: post-api-v1-questionnaires-votes
+      operationId: post-api-v1-votes
       responses:
         '200':
           description: 登録成功
@@ -543,8 +506,6 @@ paths:
                         type: string
                       choiceId:
                         type: string
-                      userToken:
-                        type: string
                 required:
                   - message
               examples:
@@ -553,7 +514,6 @@ paths:
                     message:
                       questionnaireId: アンケートIDは必ず指定してください。
                       choiceId: アンケート選択肢IDは必ず指定してください。
-                      userToken: 投票者トークンは必ず指定してください。
         '404':
           description: IDに一致するアンケートまたはアンケート選択肢が存在しない
           content:
@@ -566,9 +526,12 @@ paths:
                 required:
                   - message
               examples:
-                Example:
+                アンケートが存在しない場合:
                   value:
                     message: アンケートが存在しません。
+                アンケート選択肢が存在しない場合:
+                  value:
+                    message: 選択肢が存在しません。
         '409':
           description: 投票済みのユーザー
           content:
@@ -587,7 +550,8 @@ paths:
       tags:
         - アンケート投票
       description: アンケートの選択肢に投票を登録する
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/userToken'
       requestBody:
         content:
           application/json:
@@ -600,19 +564,14 @@ paths:
                 choiceId:
                   type: integer
                   description: アンケート選択肢ID
-                userToken:
-                  type: string
-                  description: 投票者トークン
               required:
                 - questionnaireId
                 - choiceId
-                - userToken
             examples:
               Example:
                 value:
                   questionnaireId: 123
                   choiceId: 33
-                  userToken: agNQYWjc6ypVT45stPkrMrOv
         description: アンケート投票情報
   /api/v1/tags:
     parameters: []
@@ -699,6 +658,15 @@ components:
             Example:
               value:
                 message: 認証に失敗しました。
+  parameters:
+    userToken:
+      name: userToken
+      in: cookie
+      required: true
+      schema:
+        type: string
+        example: agNQYWjc6ypVT45stPkrMrOv
+      description: アンケート投票時に使用するユーザートークン
 tags:
   - name: ユーザー
   - name: アンケート

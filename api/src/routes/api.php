@@ -24,6 +24,9 @@ Route::as('api.')->group(function () {
         Route::prefix('tags')->namespace('Tag')->as('tag.')->group(function () {
             Route::post('/', 'Store')->name('store');
         });
+        Route::prefix('votes')->namespace('QreVote')->as('qreVote.')->group(function () {
+            Route::post('/', 'Store')->name('store');
+        });
     });
 
     /**
