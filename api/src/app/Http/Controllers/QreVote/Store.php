@@ -6,8 +6,10 @@ namespace App\Http\Controllers\QreVote;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QreVote\StoreRequest;
+use Domain\Exception\DuplicateQreVoteException;
 use Domain\UseCase\QreVote\StoreQreVote;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response as StatusCode;
 
 /**
  * Store class
@@ -25,10 +27,23 @@ final class Store extends Controller
         StoreQreVote $useCase,
         StoreRequest $request
     ): JsonResponse {
-        return response()->json($useCase(
-            $request->int('questionnaireId'),
-            $request->int('choiceId'),
-            $request->input('userToken'),
-        ));
+        $userToken = $request->cookie('userToken');
+
+        try {
+            $response = $useCase(
+                $request->int('questionnaireId'),
+                $request->int('choiceId'),
+                $userToken,
+            );
+        } catch (DuplicateQreVoteException $exception) {
+            return response()->json(
+                [
+                    'message' => $exception->getMessage(),
+                ],
+                StatusCode::HTTP_CONFLICT
+            );
+        }
+
+        return response()->json($response, StatusCode::HTTP_CREATED);
     }
 }
