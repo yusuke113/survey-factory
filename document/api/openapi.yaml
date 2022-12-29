@@ -508,11 +508,11 @@ paths:
         description: アンケート情報
       tags:
         - アンケート
-  /api/v1/questionnaires/votes:
+  /api/v1/votes:
     parameters: []
     post:
       summary: アンケート投票登録
-      operationId: post-api-v1-questionnaires-votes
+      operationId: post-api-v1-votes
       responses:
         '200':
           description: 登録成功
