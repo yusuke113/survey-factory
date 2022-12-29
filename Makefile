@@ -36,7 +36,7 @@ help:
 	@echo '---------- Gitに関するコマンド ----------'
 	@echo 'gs                     -- Gitステータスを確認'
 	@echo 'gl                     -- Gitコミットログを確認'
-	@echo 'gl-ol                     -- Gitコミットログをワンラインで確認'
+	@echo 'gl-ol                  -- Gitコミットログをワンラインで確認'
 
 init:
 	@make build
@@ -65,8 +65,10 @@ build:
 	docker-compose up -d --build
 up:
 	docker-compose up -d
+	@make tele
 down:
 	docker-compose down
+	@make tele
 restart:
 	docker-compose down
 	docker-compose up -d
@@ -83,6 +85,9 @@ phpcs:
 	docker-compose exec api ./vendor/bin/phpcs --standard=./phpcs.xml .
 phpmd:
 	docker-compose exec api ./vendor/bin/phpmd ./app,./database/factories,./database/migrations,./routes/api.php,./tests ansi ./phpmd.xml
+tele:
+	@echo "\033[1;33m---------- telescope関連テーブルのレコードを削除 ----------\033[0m"
+	docker-compose exec api php artisan telescope:prune --hours=0
 
 db:
 	docker-compose exec db bash
