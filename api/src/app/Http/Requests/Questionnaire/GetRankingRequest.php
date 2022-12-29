@@ -36,7 +36,7 @@ final class GetRankingRequest extends FormRequest
     {
         return [
             'type' => [
-                'required',
+                'nullable',
                 'string',
             ],
             'page' => [

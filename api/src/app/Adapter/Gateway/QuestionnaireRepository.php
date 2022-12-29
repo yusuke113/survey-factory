@@ -20,7 +20,7 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function search(string $type, int $page, int $limit): LengthAwarePaginator
+    public function search(?string $type, int $page, int $limit): LengthAwarePaginator
     {
         return $this->executeSearchQuery($type, $page, $limit);
     }
@@ -28,29 +28,39 @@ final class QuestionnaireRepository implements QuestionnaireRepositoryInterface
     /**
      * アンケートランキング一覧取得のクエリを実行する
      *
-     * @param string $type
+     * @param string|null $type
      * @param int $page
      * @param int $limit
      * @return LengthAwarePaginator
      */
-    private function executeSearchQuery(string $type, int $page, int $limit): LengthAwarePaginator
+    private function executeSearchQuery(?string $type, int $page, int $limit): LengthAwarePaginator
     {
         $sortType = '';
         $relationTable = '';
 
         switch ($type) {
-            default:
+            case 'vote':
                 $sortType = 'qreVotes';
                 $relationTable = 'qre_votes';
                 break;
         }
 
-        return Questionnaire::withCount($sortType)
-            ->orderByDesc($relationTable . '_count')
-            ->paginate(
-                perPage: $limit,
-                page: $page
-            );
+        return Questionnaire::when(empty($sortType), function ($query) {
+            // INFO: ランキング種別に指定がない場合（デフォルト： 新着順）
+            return $query
+                ->withCount('qreVotes')
+                ->orderByDesc('created_at');
+        }, function ($query) use ($sortType, $relationTable) {
+            // INFO: ランキング種別に指定ありの場合
+            return $query
+                ->withCount($sortType)
+                ->orderByDesc($relationTable . '_count');
+        })
+        ->with(['user'])
+        ->paginate(
+            perPage: $limit,
+            page: $page
+        );
     }
 
     /**
