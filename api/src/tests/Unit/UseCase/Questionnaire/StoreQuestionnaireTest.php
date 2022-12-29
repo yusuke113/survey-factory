@@ -437,7 +437,7 @@ class StoreQuestionnaireTest extends TestCase
     public function 存在しないユーザーIDが指定された場合例外が発生すること_provider(): array
     {
         return [
-            '正常系' => [
+            '存在しないユーザーIDを指定' => [
                 '入力値' => [
                     'userId' => 33, // 存在しないユーザーID
                     'title' => 'アンケートタイトルA',
