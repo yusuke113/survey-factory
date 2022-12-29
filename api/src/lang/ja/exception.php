@@ -17,6 +17,6 @@ return [
         ],
     ],
     'duplicate_qre_vote' => [
-        'message' => 'アンケート投票が重複しています。',
+        'message' => '既に投票済みです。',
     ],
 ];

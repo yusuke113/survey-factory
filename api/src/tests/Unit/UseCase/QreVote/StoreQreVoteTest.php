@@ -283,7 +283,7 @@ class StoreQreVoteTest extends TestCase
                 ],
                 '期待値' => [
                     'exceptionClass' => DuplicateQreVoteException::class,
-                    'message' => 'アンケート投票が重複しています。',
+                    'message' => '既に投票済みです。',
                 ],
             ],
             '既に投票済みのアンケートに紐づく別の選択肢IDを指定' => [
@@ -299,7 +299,7 @@ class StoreQreVoteTest extends TestCase
                 ],
                 '期待値' => [
                     'exceptionClass' => DuplicateQreVoteException::class,
-                    'message' => 'アンケート投票が重複しています。',
+                    'message' => '既に投票済みです。',
                 ],
             ],
         ];
