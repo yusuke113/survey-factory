@@ -2,10 +2,10 @@
 
 .header {
   background: $header_bg_color;
-  
+
   .header_inner {
     position: relative;
-    width: 768px;
+    width: $content_width;
     max-width: 100%;
     margin: 0 auto;
     padding: 0 8px;
@@ -21,11 +21,16 @@
     align-items: center;
     height: 48px;
     font-size: 12px;
+    font-weight: 500;
   }
 
   .header_button_wrapper {
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  .header_nav_button_login {
+    padding: 0 8px;
   }
 }

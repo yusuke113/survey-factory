@@ -2,10 +2,10 @@
 
 .footer {
   background: $footer_bg_color;
-  
+
   .footer_inner {
     position: relative;
-    width: 768px;
+    width: $content_width;
     max-width: 100%;
     margin: 0 auto;
     padding: 8px;
@@ -14,17 +14,18 @@
   nav {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 10px;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    padding: 10px 10px 20px;
   }
 
   .footer_nav_button {
     display: flex;
     align-items: center;
-    padding: 10px 0;
     font-size: 12px;
   }
 
+  /* コピーライト */
   small {
     display: block;
     text-align: center;
