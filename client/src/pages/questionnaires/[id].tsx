@@ -4,6 +4,7 @@ import { QreChoice } from '../../domain/models/qreChoice';
 import { Questionnaire } from '../../domain/models/questionnaire';
 import { Tag } from '../../domain/models/tag';
 import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
+import { useState } from 'react';
 
 type QuestionnaireDetailPage = {
   questionnaire: Questionnaire;
@@ -16,6 +17,13 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
   qreChoices,
   tags,
 }) => {
+
+  // 投票チェックボックス判定
+  const [selectedOption, setSelectedOption] = useState('');
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  }
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -62,17 +70,17 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
               <form id='choice_form'>
                 {qreChoices.map((qreChoice, key) => (
                   <div className={styles.choice_row} key={key}>
-                    <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} />
                     <label htmlFor={`choice_${qreChoice.id}`}>
+                      <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} checked={selectedOption === `${qreChoice.id}`} onChange={handleOptionChange}/>
                       <p>{qreChoice.body}</p>
-                      <p style={{textAlign: 'right', color: '#1ca7a7', marginTop: 5, fontWeight: 'bold'}}>
+                      <p className={styles.choice_number_text}>
                         投票数: {qreChoice.voteCount}
                       </p>
                     </label>
                   </div>
                 ))}
                 <div className={styles.choice_button_row}>
-                  <input type="submit" value="投票する" className={styles.choice_button} />
+                  <input type="submit" value="投票する" disabled={selectedOption === ''} className={styles.choice_button}/>
                 </div>
               </form>
             </div>
@@ -88,7 +96,7 @@ export default QuestionnaireDetailPage;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params || {};
   const useCase = new QuestionnaireUseCase();
-  
+
   const { data } = await useCase.getQuestionnaire(+id!);
 
   return {
