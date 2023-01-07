@@ -1,4 +1,5 @@
 @use './common.scss';
+@use './variables.scss' as *;
 
 /* main visual
 ----------------------------------------------------------------- */
@@ -12,50 +13,64 @@
 
 /* TOP
 ----------------------------------------------------------------- */
+/* ランキング一覧 */
 .ranking {
   .ranking_list {
+    width: $content_width;
+    max-width: 100%;
     list-style: none;
+    margin: auto;
     li {
       &:not(:first-child) {
-        margin-top: 10px;
+        margin-top: 16px;
       }
-
       a {
         display: flex;
         overflow: hidden;
         border-radius: 8px;
         background: #fff;
         transition: .2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-
+        @include mq(sm) {
+          flex-wrap: wrap;
+        }
         &:hover {
-          box-shadow: 0 2px 8px #5e5d406b;
+          opacity: 1;
+          box-shadow: $box_shadow_common;
           transform: translateY(-6px);
         }
       }
-
       .thumbnail {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 40%;
         min-height: 100px;
-        padding: 16px;
         background: #ddd;
+        padding: 16px;
+        @include mq(sm) {
+          width: 100%;
+          height: 140px;
+        }
         p {
           font-size: 16px;
           font-weight: bold;
         }
       }
-
       .detail {
         padding: 16px;
         .title {
-          margin-bottom: 10px;
           font-size: 14px;
           font-weight: bold;
+          margin-bottom: 10px;
+          @include mq(sm) {
+            font-size: 12px;
+          }
         }
         .detail_text {
           font-size: 12px;
+          @include mq(sm) {
+            font-size: 10px;
+          }
         }
       }
     }
@@ -67,23 +82,28 @@
 .wrapper {
   max-width: 98%;
   margin: 0 auto;
-  padding: 8px 0 40px;
+  padding: 16px 0 40px;
 }
 
 .md_container {
-  width: 100%;
-  max-width: 768px;
+  width: $content_width;
+  max-width: 100%;
   margin: 0 auto;
   padding: 32px 8px;
 }
 
 .questionnaire {
+  width: 1024px;
+  max-width: 100%;
   background: #fff;
-
+  border-radius: 8px;
+  margin: auto;
   .questionnaire_description {
     text-align: center;
+    @include mq(sm) {
+      font-size: 12px;
+    }
   }
-
   .tags {
     .tag_list {
       display: flex;
@@ -91,17 +111,24 @@
       justify-content: center;
       gap: 10px;
       list-style: none;
+      @include mq(sm) {
+        font-size: 12px;
+        margin-top: 6px;
+      }
       li {
-        color: #3B5998;
+        color: $tag_color;
         &::before {
           content: "#";
         }
       }
     }
   }
-
+  /* 棒グラフ */
   .result {
     padding: 0 90px;
+    @include mq(sm) {
+      padding: 0 70px;
+    }
     .result_bar {
       display: flex;
       justify-content: space-between;
@@ -110,97 +137,115 @@
       height: 30px;
       margin: 50px auto;
     }
-    .result_1 {
-      display: flex;
-      align-items: center;
-      position: relative;
-      height: 100%;
-      background: #D26463;
-
-      .number {
-        position: absolute;
-        z-index: 1;
-        right: 100%;
-        margin-right: 10px;
-        font-weight: 900;
-        font-size: 28px;
-        color: #D26463;
-        
-        .percent {
-          font-size: 12px;
-          font-weight: 900;
-        }
-      }
-    }
+    .result_1,
     .result_2 {
       display: flex;
       align-items: center;
       position: relative;
       height: 100%;
-      background: #1F4E78;
-
       .number {
         position: absolute;
         z-index: 1;
-        left: 100%;
-        margin-left: 10px;
-        font-weight: bold;
         font-size: 28px;
-        color: #1F4E78;
-
+        font-weight: 900;
+        letter-spacing: -.06em;
+        @include mq(sm) {
+          font-size: 26px;
+        }
         .percent {
           font-size: 12px;
           font-weight: 900;
+          letter-spacing: 0;
+          padding-left: 2px;
+        }
+      }
+    }
+    .result_1 {
+      background: $vote_color-1;
+      .number {
+        right: 100%;
+        color: $vote_color-1;
+        margin-right: 10px;
+        @include mq(sm) {
+          margin-right: 5px;
+        }
+      }
+    }
+    .result_2 {
+      background: $vote_color-2;
+      .number {
+        left: 100%;
+        color: $vote_color-2;
+        margin-left: 10px;
+        @include mq(sm) {
+          margin-left: 5px;
         }
       }
     }
   }
-
+  /* 投票ボタン */
   .choices {
     .choice_row {
       &:not(:first-child) {
         margin-top: 5px;
       }
-
-      input[type=radio] {
-        display: none;
-
-        &:checked + label {
-          border: 2px solid #a1d1d1;
-          background: #e0fdfd;
-        }
-      }
-
       label {
         display: block;
-        cursor: pointer;
+        position: relative;
+        z-index: 1;
         padding: 16px;
+        cursor: pointer;
+        @include mq(sm) {
+          padding: 10px 12px;
+        }
+      }
+      input[type=radio] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        background: #fff;
         border: 2px solid #bbb;
         border-radius: 8px;
+        &:checked {
+          background: #e0fdfd;
+          border: 2px solid #a1d1d1;
+        }
+      }
+      .choice_number_text {
+        font-weight: bold;
+        text-align: right;
+        color: #1ca7a7;
+        margin-top: 5px;
       }
     }
-
     .choice_button_row {
       margin-top: 20px;
+      padding-bottom: .3em;
     }
-
     .choice_button {
-      cursor: pointer;
       display: block;
       width: 300px;
-      min-height: 50px;
-      margin: 0 auto;
+      min-height: calc(50px - .3em);
+      background: $main_color;
+      border: 0;
       border-radius: 8px;
-      border: 2px solid #1ca7a7;
-      font-family: 20px;
+      box-shadow: 0 .3em 0 #83c6be;
+      color: #fff;
+      font-size: 16px;
       font-weight: bold;
-      color: #1ca7a7;
-      background: #fff;
-      transition: all 0.2s linear;
-
+      text-align: center;
+      margin: 0 auto;
       &:hover {
-        color: #fff;
-        background: #1ca7a7;
+        transform: translateY(.3em);
+        box-shadow: none;
+      }
+      &:disabled {
+        transform: translateY(.3em);
+        background: #dadada;
+        box-shadow: none;
       }
     }
   }
