@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../../styles/components/layouts/Header.module.scss";
 
 export const Header = () => {
@@ -5,12 +6,12 @@ export const Header = () => {
     <header className={styles.header}>
       <div className={styles.header_inner}>
         <nav>
-          <a href="/" className={styles.header_nav_button}>アンケートを探す</a>
-          <a href="/" className={styles.header_nav_button}>アンケートを作る</a>
-          <a href="/" className={styles.header_nav_button}>ランキング</a>
+          <Link href="/" className={styles.header_nav_button}>アンケートを探す</Link>
+          <Link href="/" className={styles.header_nav_button}>アンケートを作る</Link>
+          <Link href="/" className={styles.header_nav_button}>ランキング</Link>
         </nav>
         <div className={styles.header_button_wrapper}>
-          <a href="/" className={`${styles.header_nav_button} ${styles.header_nav_button_login}`}>ログイン</a>
+          <Link href="/" className={`${styles.header_nav_button} ${styles.header_nav_button_login}`}>ログイン</Link>
         </div>
       </div>
     </header>

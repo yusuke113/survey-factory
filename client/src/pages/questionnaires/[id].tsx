@@ -4,7 +4,13 @@ import { QreChoice } from '../../domain/models/qreChoice';
 import { Questionnaire } from '../../domain/models/questionnaire';
 import { Tag } from '../../domain/models/tag';
 import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
-import { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { generateUserToken } from '../../utils/generateUserToken';
+import { getCookie, setCookie } from 'cookies-next';
+import { qreVoteUseCase } from '../../usecase/qreVoteUseCase';
+import { useRouter } from 'next/router';
+import Result from '../../components/questionnaires/Result';
+import BeforeResult from '../../components/questionnaires/BeforeResult';
 
 type QuestionnaireDetailPage = {
   questionnaire: Questionnaire;
@@ -12,17 +18,85 @@ type QuestionnaireDetailPage = {
   tags: Tag[];
 };
 
+const useCase = new qreVoteUseCase();
+
 const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
   questionnaire,
   qreChoices,
   tags,
 }) => {
+  // パスパラメーター取得
+  const router = useRouter();
+  const { id } = router.query;
+
+  // 投票済みかどうかフラグ
+  const [isVoted, setIsVoted] = useState(false);
+
+  // 投票数
+  const [voteCount, setVoteCount] = useState(() => {
+    return qreChoices.map((qreChoice) => {
+      return qreChoice.voteCount;
+    });
+  });
 
   // 投票チェックボックス判定
   const [selectedOption, setSelectedOption] = useState('');
-  const handleOptionChange = (e) => {
+
+  // Cookieからユーザートークンの取得。存在しなければ生成
+  const getUserToken = (): string | any => {
+    if (getCookie('user_token')) {
+      return getCookie('user_token');
+    }
+
+    setCookie('user_token', generateUserToken(24));
+    const token = getCookie('user_token');
+
+    return token;
+  };
+
+  // 投票ボタンChangeイベント
+  const handleOptionChange = (e: any) => {
+    if (selectedOption === 'duplicate') {
+      return;
+    }
     setSelectedOption(e.target.value);
-  }
+  };
+
+  // 投票するボタン送信イベント
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    // ラジオボタン未選択でのsubmit禁止
+    if (selectedOption === '' || selectedOption === 'duplicate') {
+      return;
+    }
+
+    const choiceIndex = qreChoices.findIndex(
+      (qreChoice) => qreChoice.id === Number(e.target.elements.choice.value)
+    );
+
+    qreChoices[choiceIndex].voteCount++;
+    questionnaire.voteCountAll++;
+    setSelectedOption('duplicate');
+
+    let updateVoteCount = qreChoices.map((qreChoice) => {
+      return qreChoice.voteCount;
+    });
+
+    setVoteCount(updateVoteCount);
+    setIsVoted(true);
+
+    try {
+      const result = await useCase.postQreVote(
+        Number(id),
+        e.target.elements.choice.value,
+        getUserToken()
+      );
+    } catch (error: any) {
+      console.error(error);
+      return;
+    }
+  };
 
   return (
     <>
@@ -35,52 +109,47 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
               <ul className={styles.tag_list}>
                 {tags.map((tag, key) => (
                   <li className={styles.tag} key={key}>
-                    <a href="">{tag.name}</a>
+                    <a>{tag.name}</a>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className={styles.result}>
-              <div className={styles.result_bar}>
-                <div
-                  className={styles.result_1}
-                  style={{
-                    width: (qreChoices[0].voteCount / questionnaire.voteCountAll) * 100 + '%',
-                  }}
-                >
-                  <span className={styles.number}>
-                    {Math.round((qreChoices[0].voteCount / questionnaire.voteCountAll) * 1000) / 10}
-                    <span className={styles.percent}>%</span>
-                  </span>
-                </div>
-                <div
-                  className={styles.result_2}
-                  style={{
-                    width: (qreChoices[1].voteCount / questionnaire.voteCountAll) * 100 + '%',
-                  }}
-                >
-                  <span className={styles.number}>
-                    {Math.round((qreChoices[1].voteCount / questionnaire.voteCountAll) * 1000) / 10}
-                    <span className={styles.percent}>%</span>
-                  </span>
-                </div>
-              </div>
-            </div>
+            {
+              isVoted
+                ? <Result voteCount={voteCount} questionnaire={questionnaire} />
+                : <BeforeResult />
+            }
             <div className={styles.choices}>
-              <form id='choice_form'>
+              <form id="choice_form" onSubmit={handleSubmit}>
                 {qreChoices.map((qreChoice, key) => (
                   <div className={styles.choice_row} key={key}>
                     <label htmlFor={`choice_${qreChoice.id}`}>
-                      <input type="radio" name="choice" id={`choice_${qreChoice.id}`} value={qreChoice.id} key={key} checked={selectedOption === `${qreChoice.id}`} onChange={handleOptionChange}/>
-                      <p>{qreChoice.body}</p>
-                      <p className={styles.choice_number_text}>
-                        投票数: {qreChoice.voteCount}
-                      </p>
+                      <input
+                        type="radio"
+                        name="choice"
+                        id={`choice_${qreChoice.id}`}
+                        value={qreChoice.id}
+                        key={key}
+                        checked={selectedOption === `${qreChoice.id}`}
+                        onChange={handleOptionChange}
+                      />
+                      <span className={`${styles.outer} ${isVoted ? styles.voted : ''}`}></span>
+                      <p className={styles.choice_body}>{qreChoice.body}</p>
+                      {
+                        isVoted
+                          ? <p className={styles.choice_number_text}>投票数: {qreChoice.voteCount}</p>
+                          : false
+                      }
                     </label>
                   </div>
                 ))}
                 <div className={styles.choice_button_row}>
-                  <input type="submit" value="投票する" disabled={selectedOption === ''} className={styles.choice_button}/>
+                  <input
+                    type="submit"
+                    value="投票する"
+                    disabled={selectedOption === '' || selectedOption === 'duplicate'}
+                    className={styles.choice_button}
+                  />
                 </div>
               </form>
             </div>
