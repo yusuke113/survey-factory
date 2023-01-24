@@ -478,6 +478,21 @@ paths:
       operationId: post-api-v1-votes
       responses:
         '200':
+          description: 既に投票済みの場合
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                既に投票済みの場合:
+                  value:
+                    message: 既に投票済みです。
+        '201':
           description: 登録成功
           content:
             application/json:
@@ -489,7 +504,7 @@ paths:
                 required:
                   - message
               examples:
-                Example:
+                正常系:
                   value:
                     message: 登録が完了しました。
         '400':
@@ -532,21 +547,6 @@ paths:
                 アンケート選択肢が存在しない場合:
                   value:
                     message: 選択肢が存在しません。
-        '409':
-          description: 投票済みのユーザー
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                Example:
-                  value:
-                    message: 既に投票済みです。
       tags:
         - アンケート投票
       description: アンケートの選択肢に投票を登録する
@@ -658,6 +658,21 @@ components:
             Example:
               value:
                 message: 認証に失敗しました。
+    Created:
+      description: 登録成功
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+              - message
+          examples:
+            example:
+              value:
+                message: 登録が完了しました。
   parameters:
     userToken:
       name: userToken

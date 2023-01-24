@@ -22,6 +22,7 @@ body {
   font-family: $base_font-family-round;
   font-size: 14px;
   line-height: 1.5;
+  color: $base_text_color;
 }
 
 p,
@@ -62,7 +63,7 @@ ol {
 a {
   color: inherit;
   text-decoration: none;
-  &:hover {
+  &[href]:hover {
     opacity: .7;
   }
 }
@@ -126,7 +127,6 @@ main {
   flex: 1;
 }
 
-
 /* Headings
 ----------------------------------------------------------------- */
 h1 {
@@ -161,4 +161,10 @@ h5 {
   h5 {
     font-size: 14px;
   }
+}
+
+/* Option
+----------------------------------------------------------------- */
+.hidden {
+  display: none !important;
 }
