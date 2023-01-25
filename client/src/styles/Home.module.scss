@@ -123,8 +123,21 @@
       }
     }
   }
+  /* 結果表示前 */
+  .before_result {
+    margin: 50px auto;
+    p {
+      padding: 5px 0;
+      border: 2px solid $base_text_color;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+  }
   /* 棒グラフ */
   .result {
+    margin: 50px 0;
     padding: 0 90px;
     @include mq(sm) {
       padding: 0 70px;
@@ -135,10 +148,9 @@
       width: 500px;
       max-width: 100%;
       height: 30px;
-      margin: 50px auto;
+      margin: 0 auto;
     }
-    .result_1,
-    .result_2 {
+    .result_num {
       display: flex;
       align-items: center;
       position: relative;
@@ -160,7 +172,7 @@
         }
       }
     }
-    .result_1 {
+    .result_num:nth-of-type(1) {
       background: $vote_color-1;
       .number {
         right: 100%;
@@ -171,7 +183,7 @@
         }
       }
     }
-    .result_2 {
+    .result_num:nth-of-type(2) {
       background: $vote_color-2;
       .number {
         left: 100%;
@@ -193,13 +205,15 @@
         display: block;
         position: relative;
         z-index: 1;
-        padding: 16px;
+        padding: 16px 8px;
         cursor: pointer;
         @include mq(sm) {
           padding: 10px 12px;
         }
       }
       input[type=radio] {
+        display: flex;
+        align-items: center;
         position: absolute;
         top: 0;
         left: 0;
@@ -209,10 +223,49 @@
         background: #fff;
         border: 2px solid #bbb;
         border-radius: 8px;
+        transition: all 0.1s linear;
         &:checked {
           background: #e0fdfd;
           border: 2px solid #a1d1d1;
+          & + .outer {
+            &::before {
+              opacity: 1;
+              width: 16px;
+              height: 16px;
+            }
+          }
         }
+      }
+      .outer {
+        display: flex;
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid $main_color;
+        transform: translateY(-50%);
+        &::before {
+          content: '';
+          display: block;
+          opacity: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: $main_color;
+          transform: translate(-50%, -50%);
+          transition: all 0.1s linear;
+        }
+        &.voted {
+          display: none;
+        }
+      }
+      .choice_body {
+        padding: 0 0 0 32px;
       }
       .choice_number_text {
         font-weight: bold;

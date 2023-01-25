@@ -27,7 +27,7 @@ final class Store extends Controller
         StoreQreVote $useCase,
         StoreRequest $request
     ): JsonResponse {
-        $userToken = $request->cookie('userToken');
+        $userToken = $request->cookie('user_token');
 
         try {
             $response = $useCase(
@@ -40,7 +40,6 @@ final class Store extends Controller
                 [
                     'message' => $exception->getMessage(),
                 ],
-                StatusCode::HTTP_CONFLICT
             );
         }
 
