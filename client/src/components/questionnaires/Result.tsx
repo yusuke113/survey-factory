@@ -4,14 +4,14 @@ import styles from '../../styles/Home.module.scss';
 
 type Result = {
   questionnaire: Questionnaire;
-  voteCount: Number[];
+  voteCount: number[];
 };
 
 const Result: NextPage<Result> = ({ voteCount, questionnaire }) => {
   return (
     <div className={styles.result}>
       <div className={styles.result_bar}>
-        {voteCount.map((count: Number, key) => (
+        {voteCount.map((count: number, key) => (
           <div
             className={styles.result_num}
             style={{ width: (count / questionnaire.voteCountAll) * 100 + '%' }}

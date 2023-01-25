@@ -9,6 +9,7 @@ help:
 	@echo 'ps                     -- コンテナ一覧を表示します'
 	@echo 'build                  -- 全コンテナイメージをビルドします'
 	@echo 'up                     -- 全コンテナを作成後、コンテナを起動します'
+	@echo 'up-prod                -- 本番モードで全コンテナを作成後、コンテナを起動します'
 	@echo 'restart                -- 全コンテナを作り直した後起動します ※image、volumeは既存のものを再利用'
 	@echo 'down                   -- 全コンテナを削除します'
 	@echo 'destroy                -- コンテナ、ネットワーク、イメージ、ボリュームを削除します'
@@ -66,6 +67,9 @@ build:
 up:
 	docker-compose up -d
 	@make tele
+up-prod:
+	docker-compose -f docker-compose.prod.yml up --build -d
+	@make tele
 down:
 	docker-compose down
 	@make tele
@@ -105,7 +109,7 @@ seed:
 rollback:
 	docker-compose exec api php artisan migrate:rollback
 
-client:
+client-bash:
 	docker-compose exec client sh
 npm-install:
 	docker-compose exec client npm i
