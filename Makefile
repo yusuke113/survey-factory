@@ -43,7 +43,7 @@ init:
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
-	@make migrate
+	@make fresh
 	@make seed
 	@make npm-install
 	@make up
@@ -54,7 +54,7 @@ remake:
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
-	@make migrate
+	@make fresh
 	@make seed
 	@make npm-install
 	@make up
