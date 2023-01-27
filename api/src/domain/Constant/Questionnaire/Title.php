@@ -14,5 +14,5 @@ final class Title
      *
      * @var int
      */
-    public const MAX_LENGTH = 50;
+    public const MAX_LENGTH = 30;
 }
