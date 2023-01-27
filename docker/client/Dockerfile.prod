@@ -8,7 +8,7 @@ COPY client/ /var/www/
 
 ENV NODE_ENV production
 
-RUN npm install
+RUN npm ci --only=production
 RUN npm run build
 
 EXPOSE 4444
