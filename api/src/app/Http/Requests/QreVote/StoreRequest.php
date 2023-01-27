@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\QreVote;
 
 use App\Http\Requests\Traits\Castable;
+use App\Http\Requests\Traits\CookieParameterToRequest;
 use App\Http\Requests\Traits\SingleValidationMessage;
 use Domain\Constant\User\UserToken;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +15,9 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 final class StoreRequest extends FormRequest
 {
-    use Castable, SingleValidationMessage;
+    use Castable;
+    use SingleValidationMessage;
+    use CookieParameterToRequest;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -34,6 +37,10 @@ final class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_token' => [
+                'required',
+                'min:' . UserToken::MAX_LENGTH,
+            ],
             'questionnaireId' => [
                 'required',
                 'integer',

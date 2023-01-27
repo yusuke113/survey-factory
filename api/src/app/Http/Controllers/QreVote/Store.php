@@ -27,13 +27,11 @@ final class Store extends Controller
         StoreQreVote $useCase,
         StoreRequest $request
     ): JsonResponse {
-        $userToken = $request->cookie('user_token');
-
         try {
             $response = $useCase(
                 $request->int('questionnaireId'),
                 $request->int('choiceId'),
-                $userToken,
+                $request->input('user_token')
             );
         } catch (DuplicateQreVoteException $exception) {
             return response()->json(

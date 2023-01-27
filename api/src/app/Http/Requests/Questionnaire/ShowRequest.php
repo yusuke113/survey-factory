@@ -13,7 +13,8 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 final class ShowRequest extends FormRequest
 {
-    use SingleValidationMessage, RouteParameterToRequest;
+    use SingleValidationMessage;
+    use RouteParameterToRequest;
 
     /**
      * Determine if the user is authorized to make this request.

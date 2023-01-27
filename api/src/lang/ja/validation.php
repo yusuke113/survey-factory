@@ -170,6 +170,7 @@ return [
         'tags' => 'タグ',
         'tags.*.id' => 'タグID',
         'tags.*.name' => 'タグ名',
+        'user_token' => 'ユーザートークン'
     ],
 
 ];

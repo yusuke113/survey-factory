@@ -15,7 +15,8 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 final class GetRankingRequest extends FormRequest
 {
-    use Castable, SingleValidationMessage;
+    use Castable;
+    use SingleValidationMessage;
 
     /**
      * Determine if the user is authorized to make this request.
