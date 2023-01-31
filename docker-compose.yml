@@ -12,7 +12,7 @@ services:
     depends_on:
       - nginx
     networks:
-      - web
+      survey-factory_net:
   api:
     build:
       context: .
@@ -20,8 +20,10 @@ services:
     volumes:
       - php_socket:/var/run/php-fpm
       - ./api/src/:/api/src
+    depends_on:
+      - db
     networks:
-      - web
+      survey-factory_net:
 
   nginx:
     build:
@@ -35,13 +37,13 @@ services:
       - php_socket:/var/run/php-fpm
       - ./api/src/:/api/src
     networks:
-      - web
+      survey-factory_net:
 
   db:
     build:
       context: .
       dockerfile: ./docker/db/Dockerfile
-    platform: linux/amd64
+    platform: linux/amd64 # M1チップの場合はコメントアウトを外す
     ports:
       - 3306:3306
     environment:
@@ -59,12 +61,12 @@ services:
         target: /etc/mysql/conf.d/my.conf
       - mysql-volume:/var/lib/mysql
     networks:
-      - web
+      survey-factory_net:
 
 volumes:
   php_socket:
   mysql-volume:
 
 networks:
-  web:
-    driver: bridge
+  survey-factory_net:
+    external: true

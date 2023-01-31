@@ -31,7 +31,7 @@ help:
 	@echo 'rollback               -- DBのマイグレートの状態を一つ戻します'
 	@echo ''
 	@echo "\033[1;34m---------- clientコンテナに関するコマンド ----------\033[0m"
-	@echo 'client                 -- clientコンテナに接続します'
+	@echo 'client-sh                 -- clientコンテナに接続します'
 	@echo 'npm-install            -- clientコンテナで依存モジュール群をインストールします'
 	@echo ''
 	@echo '---------- Gitに関するコマンド ----------'
@@ -40,36 +40,46 @@ help:
 	@echo 'gl-ol                  -- Gitコミットログをワンラインで確認'
 
 init:
+	@echo "\033[1;32mDocker環境のセットアップ中...\033[0m"
+	@make create-network
 	@make build
+	@make up
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
-	@make fresh
+	@make migrate
 	@make seed
-	@make npm-install
+	docker-compose run --rm client npm i
 	@make up
 
 remake:
+	@echo "\033[1;32mDocker環境削除中...\033[0m"
 	@make destroy
+	@echo "\033[1;32mDocker環境のセットアップ中...\033[0m"
+	@make create-network
 	@make build
+	@make up
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
-	@make fresh
+	@make migrate
 	@make seed
-	@make npm-install
+	docker-compose run --rm client npm i
 	@make up
+
+create-network:
+	@docker network create survey-factory_net
 
 ps:
 	docker ps -a
 build:
-	docker-compose up -d --build
+	docker-compose build --no-cache --force-rm
 up:
 	docker-compose up -d
-	@make tele
 up-prod:
-	docker-compose -f docker-compose.prod.yml up --build -d
-	@make tele
+	docker-compose -f docker-compose.prod.yml build
+	docker-compose -f docker-compose.prod.yml run --rm client npm run build
+	docker-compose -f docker-compose.prod.yml up -d
 down:
 	docker-compose down
 	@make tele
@@ -109,7 +119,7 @@ seed:
 rollback:
 	docker-compose exec api php artisan migrate:rollback
 
-client-bash:
+client-sh:
 	docker-compose exec client sh
 npm-install:
 	docker-compose exec client npm i
