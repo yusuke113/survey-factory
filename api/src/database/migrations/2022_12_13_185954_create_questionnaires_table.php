@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id()->comment('アンケートID');
             $table->uuid()->unique('idx_questionnaires_uuid')->comment('アンケートUUID');
             $table->foreignId('user_id')->constrained()->index('idx_questionnaires_user_id')->comment('ユーザーID');
-            $table->string('title', 50)->comment('アンケートタイトル');
+            $table->string('title', 30)->comment('アンケートタイトル');
             $table->string('description', 50)->nullable()->comment('アンケート説明');
             $table->string('thumbnail_url', 2083)->nullable()->comment('サムネイルURL');
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('作成日時');

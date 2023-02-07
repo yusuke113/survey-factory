@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id()->comment('タグID');
             $table->uuid()->unique('idx_tags_uuid')->comment('タグUUID');
-            $table->string('name')->index('idx_tags_name')->comment('タグ名');
+            $table->string('name', 20)->index('idx_tags_name')->comment('タグ名');
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('作成日時');
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('更新日時');
             $table->dateTime('deleted_at')->nullable()->comment('削除日時');
