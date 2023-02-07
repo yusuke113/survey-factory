@@ -1,0 +1,86 @@
+@use '../../variables.scss' as *;
+@use '../../mixin.scss' as *;
+
+.input_row {
+  margin-bottom: 20px;
+}
+
+.text_label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.text_count {
+  font-size: 12px;
+  color: #bfbcbc;
+}
+
+.form_parts {
+  &.input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 2px;
+    border: 2px solid $base_border_color;
+    background: #fff;
+    font-size: 14px;
+    @include placeholder {
+      font-size: 14px;
+      color: #757575;
+    }
+    &.-short {
+      max-width: 300px;
+    }
+    &:disabled {
+      background: $base_border_color;
+    }
+  }
+}
+
+// タグ登録フォーム
+.tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    color: $tag_color;
+    background: $tag_bg_color;
+  }
+  .tag_remove {
+    display: inline-block;
+    position: relative;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    padding: 7px;
+    border: 1px solid $tag_color;
+    line-height: 1;
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 1px;
+      background: $tag_color;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 1px;
+      background: $tag_color;
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+}
