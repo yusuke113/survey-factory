@@ -27,6 +27,7 @@ help:
 	@echo 'migrate                -- DBのマイグレートを実行します'
 	@echo 'migrate-status         -- DBのマイグレート状態を確認します'
 	@echo 'fresh                  -- DBのテーブルを作り直します'
+	@echo 'fresh-seed             -- DBのテーブルとシーディングを作り直します'
 	@echo 'seed                   -- テーブルにデータをシーディングします'
 	@echo 'rollback               -- DBのマイグレートの状態を一つ戻します'
 	@echo ''
@@ -38,6 +39,9 @@ help:
 	@echo 'gs                     -- Gitステータスを確認'
 	@echo 'gl                     -- Gitコミットログを確認'
 	@echo 'gl-ol                  -- Gitコミットログをワンラインで確認'
+	@echo '---------- 便利ツールに関するコマンド ----------'
+	@echo 'open                   -- ブラウザで開発環境のページをブラウザで開く'
+	@echo 'open-prod              -- ブラウザで本番環境のページをブラウザで開く'
 
 init:
 	@echo "\033[1;32mDocker環境のセットアップ中...\033[0m"
@@ -114,6 +118,8 @@ migrate-status:
 	docker-compose exec api php artisan migrate:status
 fresh:
 	docker-compose exec api php artisan migrate:fresh
+fresh-seed:
+	docker-compose exec api php artisan migrate:fresh --seed
 seed:
 	docker-compose exec api php artisan db:seed
 rollback:
@@ -130,3 +136,8 @@ gl:
 	git log
 gl-ol:
 	git log --oneline
+
+open:
+	open http://localhost:3333
+open-prod:
+	open http://localhost:4444
