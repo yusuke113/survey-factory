@@ -51,9 +51,9 @@ init:
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
+	docker-compose run --rm client npm i
 	@make migrate
 	@make seed
-	docker-compose run --rm client npm i
 	@make up
 
 remake:
@@ -66,9 +66,9 @@ remake:
 	docker-compose exec api cp .env.example .env
 	docker-compose exec api composer install
 	docker-compose exec api php artisan key:generate
+	docker-compose run --rm client npm i
 	@make migrate
 	@make seed
-	docker-compose run --rm client npm i
 	@make up
 
 create-network:
@@ -105,7 +105,7 @@ phpmd:
 	docker-compose exec api ./vendor/bin/phpmd ./app,./database/factories,./database/migrations,./routes/api.php,./tests ansi ./phpmd.xml
 tele:
 	@echo "\033[1;33m---------- telescope関連テーブルのレコードを削除 ----------\033[0m"
-	docker-compose exec api php artisan telescope:prune --hours=0
+	-@docker-compose exec api php artisan telescope:prune --hours=0
 
 db:
 	docker-compose exec db bash
