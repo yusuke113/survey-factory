@@ -50,7 +50,7 @@ final class StoreRequest extends FormRequest
                 'max:' . Title::MAX_LENGTH,
             ],
             'description' => [
-                'required',
+                'nullable',
                 'string',
                 'max:' . Description::MAX_LENGTH,
             ],

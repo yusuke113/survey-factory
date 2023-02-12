@@ -207,8 +207,8 @@ paths:
                   value:
                     message:
                       userId: ユーザーIDは整数で指定してください。
-                      title: タイトルは、255文字以下で指定してください。
-                      description: アンケートの説明は必ず指定してください。
+                      title: タイトルは、30文字以下で指定してください。
+                      description: アンケートの説明は50文字以下で指定してください。
                       thumbnailUrl: サムネイルに正しい形式を指定してください。
                       qreChoices:
                         body: 選択肢は必ず指定してください。
@@ -265,7 +265,6 @@ paths:
               required:
                 - userId
                 - title
-                - description
                 - qreChoices
                 - tags
             examples:
@@ -302,11 +301,11 @@ paths:
         - アンケート
   '/api/v1/questionnaires/{questionnaireId}':
     get:
-      summary: アンケートプレイ画面詳細取得
+      summary: アンケート詳細取得
       operationId: get-api-v1-questionnaires-questionnaireId
       responses:
         '200':
-          description: アンケートプレイ画面詳細の返却成功
+          description: アンケート詳細の返却成功
           content:
             application/json:
               schema:
