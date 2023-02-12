@@ -1,7 +1,12 @@
-import { GetServerSideProps, NextPage } from 'next';
-import React, { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Tag } from '../../domain/models/tag';
+import { addTagListState } from '../../states/atoms/addTagListAtom';
+import { inputTagState } from '../../states/atoms/inputTagAtom';
+import { addTagListLengthState } from '../../states/selectors/addTagListLengthSelector';
+import { inputTagLengthState } from '../../states/selectors/inputTagLengthSelector';
 import styles from '../../styles/components/formParts/Form.module.scss';
 import { TagUseCase } from '../../usecase/tagUseCase';
+import { detectDuplicates } from '../../utils/arrayUtils';
 
 interface InputTagProps {
   title: string;
@@ -11,89 +16,91 @@ interface InputTagProps {
   maxLength: number;
 }
 
-type TagList = {
-  id: number;
-  name: string;
-};
-
 const tagUseCase = new TagUseCase();
 
 export const InputTag: React.FC<InputTagProps> = ({ title, id, name, placeholder, maxLength }) => {
-  // タグ名のテキストフィールド
-  const [tagInput, setTagInput] = useState('');
-  // タグ名のテキストフィールドの文字数
-  const [tagInputCount, setTagInputCount] = useState(0);
-  // 追加されたタグのリスト
-  const [tagList, setTagList] = useState<TagList[]>([]);
+  // タグ名のテキストフィールドと文字数のstate
+  const [inputTag, setInputTag] = useRecoilState(inputTagState);
+  const inputTagLength = useRecoilValue(inputTagLengthState);
+
+  // 追加されたタグリストとそのリストに含まれるタグの個数
+  const [addTagList, setAddTagList] = useRecoilState(addTagListState);
+  const addTagListLength = useRecoilValue(addTagListLengthState);
 
   // テキスト入力時のイベント
-  const handleTagInputChange = (e: any) => {
-    // 最大文字数の場合入力を拒否
-    if (e.target.value.length > maxLength) {
-      return;
+  const handleInputChange = (e: any) => {
+    // 最大文字数に達していない場合のみ入力を反映
+    if (e.target.value.length <= maxLength) {
+      setInputTag(e.target.value);
     }
-
-    setTagInput(e.target.value);
-    setTagInputCount(e.target.value.length);
   };
 
   // エンターキー押下時タグを登録
-  const handleTagSubmit = async (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // リストが既に3つ以上の場合は登録しない
-    if (tagList.length >= 3) {
+    /*
+     * 1. リストが既に3つ以上の場合は登録しない
+     * 2. タグ名入力欄が空の場合は登録しない
+     */
+    if (addTagListLength >= 3 || inputTag === '') {
       return;
     }
 
-    const { data } = await tagUseCase.postTag(tagInput);
-    const newTagList: TagList[] = [...tagList, data];
+    const { data } = await tagUseCase.postTag(inputTag);
 
-    setTagInput('');
+    let newTagList: Tag[] = [...addTagList, data];
 
-    setTagList(newTagList);
+    if (detectDuplicates(newTagList)) {
+      newTagList = [...addTagList];
+      setInputTag('');
+      return;
+    }
+
+    setInputTag('');
+    setAddTagList(newTagList);
   };
 
   const removeTag = (id: number) => {
-    setTagList((tagList) => {
-      return tagList.filter(tag => tag.id !== id);
+    setAddTagList((tagList) => {
+      return tagList.filter((tag) => tag.id !== id);
     });
-  };
-
-  const testButton = () => {
-    console.log(tagList);
   };
 
   return (
     <div className={styles.input_row}>
-      <form onSubmit={handleTagSubmit}>
+      <form className={styles.tag_form} onSubmit={handleSubmit}>
         <label htmlFor={id} className={styles.text_label}>
           {title}
           <span className={styles.text_count}>
-            {tagInputCount}/{maxLength}
+            {inputTagLength}/{maxLength}
           </span>
         </label>
         <input
           type="text"
           id={id}
-          className={`${styles.form_parts} ${styles.input} ${styles['-short']}`}
+          className={`${styles.form_parts} ${styles.input_text}`}
           name={name}
-          placeholder={placeholder}
+          placeholder={addTagListLength >= 3 ? '3つ設定済み' : placeholder}
           maxLength={maxLength}
-          value={tagInput}
-          disabled={tagList.length >= 3}
-          onChange={handleTagInputChange}
+          value={inputTag}
+          disabled={addTagListLength >= 3}
+          onChange={handleInputChange}
         />
         <div className={styles.tags}>
-          {tagList.map((tag, key) => (
+          {addTagList.map((tag, key) => (
             <span className={styles.tag} id={`tag_${tag.id}`} key={key}>
               <span># {tag.name}</span>
-              <a href="#" className={styles.tag_remove} title={`${tag.name}タグを削除`} onClick={() => removeTag(tag.id)}></a>
+              <a
+                href="#"
+                className={styles.tag_remove}
+                title={`${tag.name}タグを削除`}
+                onClick={() => removeTag(tag.id)}
+              ></a>
             </span>
           ))}
         </div>
       </form>
-      <button onClick={testButton}>確認ボタン</button>
     </div>
   );
 };

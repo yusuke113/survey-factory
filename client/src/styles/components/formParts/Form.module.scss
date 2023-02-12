@@ -5,6 +5,8 @@
   margin-bottom: 20px;
 }
 
+/* ラベル
+----------------------------------------------------------------- */
 .text_label {
   display: flex;
   justify-content: space-between;
@@ -17,29 +19,52 @@
   color: #bfbcbc;
 }
 
+.image_label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid $tag_color;
+  border-radius: 4px;
+  padding: 6px;
+  color: $tag_color;
+  svg[data-icon='file-image'] {
+    margin-right: 5px;
+    font-size: 16px;
+  }
+}
+
+/* フォームパーツ
+----------------------------------------------------------------- */
 .form_parts {
-  &.input {
+  // テキストフィールド
+  &.input_text {
     display: block;
     width: 100%;
     padding: 8px;
     border-radius: 2px;
-    border: 2px solid $base_border_color;
+    border: 1px solid $base_border_color;
     background: #fff;
     font-size: 14px;
     @include placeholder {
       font-size: 14px;
       color: #757575;
     }
-    &.-short {
-      max-width: 300px;
-    }
     &:disabled {
       background: $base_border_color;
     }
   }
+  // ファイル投稿フォーム
+  &.input_image {
+    display: none;
+  }
 }
 
-// タグ登録フォーム
+/* タグ登録フォーム
+----------------------------------------------------------------- */
+.tag_form {
+  max-width: 300px;
+}
+
 .tags {
   display: flex;
   gap: 8px;
@@ -82,5 +107,44 @@
       background: $tag_color;
       transform: translate(-50%, -50%) rotate(-45deg);
     }
+  }
+}
+
+/* 設問登録
+----------------------------------------------------------------- */
+.choice_create {
+  padding: 8px;
+  border: 1px solid $base_text_color;
+  background: $light_bg_color;
+}
+
+/* 送信ボタン
+----------------------------------------------------------------- */
+.submit_button {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border-radius: 4px;
+  border: 2px solid $tag_color;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: $tag_color;
+  transition: all 0.1s linear;
+  &:hover {
+    background: $tag_color;
+    color: #fff;
+
+  }
+}
+
+/* エラーメッセージ
+----------------------------------------------------------------- */
+.error_area {
+  display: block;
+  padding: 8px;
+  background: #f1a6a6;
+  .error_text {
+    color: #b42424;
   }
 }

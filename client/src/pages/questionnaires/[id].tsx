@@ -14,7 +14,7 @@ import BeforeResult from '../../components/questionnaires/BeforeResult';
 
 type QuestionnaireDetailPage = {
   questionnaire: Questionnaire;
-  qreChoices: QreChoice[];
+  qreChoices: Omit<QreChoice, 'displayOrder'>[];
   tags: Tag[];
 };
 
