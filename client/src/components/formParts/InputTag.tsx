@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Tag } from '../../domain/models/tag';
 import { addTagListState } from '../../states/atoms/addTagListAtom';
@@ -26,6 +27,13 @@ export const InputTag: React.FC<InputTagProps> = ({ title, id, name, placeholder
   // 追加されたタグリストとそのリストに含まれるタグの個数
   const [addTagList, setAddTagList] = useRecoilState(addTagListState);
   const addTagListLength = useRecoilValue(addTagListLengthState);
+
+  // 初期化
+  useEffect(() => {
+    if (addTagList.length === 0) {
+      setInputTag('');
+    }
+  }, [addTagList]);
 
   // テキスト入力時のイベント
   const handleInputChange = (e: any) => {

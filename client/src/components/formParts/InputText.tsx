@@ -1,4 +1,4 @@
-import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil';
+import { SetterOrUpdater, useRecoilState } from 'recoil';
 import { errorMessageState } from '../../states/atoms/errorMessageAtom';
 import styles from '../../styles/components/formParts/Form.module.scss';
 import { removeError } from '../../utils/validation';
@@ -34,7 +34,7 @@ export const InputText: React.FC<InputTextProps> = ({
 
     // 文字入力後エラーメッセージを外す
     removeError(target);
-    const removeErrorMessage = {...errorMessage};
+    const removeErrorMessage = { ...errorMessage };
     delete removeErrorMessage[name];
     setErrorMessage(removeErrorMessage);
 

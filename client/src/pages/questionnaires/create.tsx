@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { createContext } from 'react';
+import { createContext, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { InputChoiceArea } from '../../components/formParts/InputChoiceArea';
 // import { InputImage } from '../../components/formParts/InputImage';
@@ -40,6 +40,24 @@ const QuestionnaireCreatePage: NextPage = () => {
 
   // エラーメッセージを更新するセッター関数
   const setErrorMessage = useSetRecoilState(errorMessageState);
+
+  // recoilで管理してるフィールドの初期化
+  useEffect(() => {
+    setInputTitle('');
+    setInputDescription('');
+    setAddTagList([]);
+    setAddChoiceList([
+      {
+        body: '',
+        displayOrder: 1,
+      },
+      {
+        body: '',
+        displayOrder: 2,
+      },
+    ]);
+    setErrorMessage({});
+  }, []);
 
   const submitButton = async () => {
     if (Object.keys(validation()).length) {
