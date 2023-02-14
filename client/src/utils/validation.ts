@@ -1,19 +1,20 @@
-export const validation = () => {
-  const targetList = [...document.querySelectorAll('.validate-text')];
+export const validation = (): { [key: string]: string } => {
 
-  let message = {};
+  let errorMessage: { [key: string]: string } = {};
+
+  const targetList = [...document.querySelectorAll('.validate-text')] as HTMLInputElement[];
 
   // 空の入力欄チェック
   targetList.map((target) => {
     if (target.value.trim() === '') {
-      message[target.getAttribute('name')] =`${target.dataset.validationName}を入力してください`;
+      errorMessage[target.getAttribute('name') as string] = `${target.dataset.validationName}を入力してください`;
       target.classList.add('error');
     }
   })
 
-  return message;
+  return errorMessage;
 }
 
-export const removeError = (target) => {
+export const removeError = (target: HTMLElement) => {
   target.classList.remove('error');
 }

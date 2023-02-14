@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { errorMessageState } from '../../states/atoms/errorMessageAtom';
 import styles from '../../styles/components/formParts/Form.module.scss';
 import { removeError } from '../../utils/validation';
 
@@ -18,12 +20,18 @@ export const InputChoice: React.FC<InputChoiceProps> = ({
   // 選択肢のテキストフィールドと文字数のstate
   const [inputChoice, setInputChoice] = useState('');
 
+  // エラーメッセージのstate
+  const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     const newInput = target.value;
 
-    // 文字入力後エラーを外す
+    // 文字入力後エラーメッセージを外す
     removeError(target);
+    const removeErrorMessage = {...errorMessage};
+    delete removeErrorMessage[`choice_${displayOrder}`];
+    setErrorMessage(removeErrorMessage);
 
     // 最大文字数に達していない場合のみ入力を反映
     if (newInput.length <= maxLength) {
@@ -45,6 +53,11 @@ export const InputChoice: React.FC<InputChoiceProps> = ({
         data-validation-name={validationName}
         onChange={handleChange}
       />
+      {errorMessage[`choice_${displayOrder}`] ? (
+        <div className={styles.error_area}>
+          <span className={styles.error_text}>{errorMessage[`choice_${displayOrder}`]}</span>
+        </div>
+      ) : null}
     </>
   );
 };

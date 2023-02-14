@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
-import { SetterOrUpdater } from 'recoil';
-import { ErrorMessage } from '../../pages/questionnaires/create';
+import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil';
+import { errorMessageState } from '../../states/atoms/errorMessageAtom';
 import styles from '../../styles/components/formParts/Form.module.scss';
 import { removeError } from '../../utils/validation';
 
@@ -13,7 +12,7 @@ interface InputTextProps {
   validationName: string;
   inputText: string;
   setInputText: SetterOrUpdater<string>;
-  inputTextLength: number
+  inputTextLength: number;
 }
 
 export const InputText: React.FC<InputTextProps> = ({
@@ -25,15 +24,19 @@ export const InputText: React.FC<InputTextProps> = ({
   validationName,
   inputText,
   setInputText,
-  inputTextLength
+  inputTextLength,
 }) => {
-  // エラーメッセージ
-  const error = useContext(ErrorMessage);
+  // エラーメッセージのstate
+  const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState);
 
   const handleChange = (e: any) => {
     const target = e.target;
-    // 文字入力後エラーを外す
+
+    // 文字入力後エラーメッセージを外す
     removeError(target);
+    const removeErrorMessage = {...errorMessage};
+    delete removeErrorMessage[name];
+    setErrorMessage(removeErrorMessage);
 
     // 最大文字数に達していない場合のみ入力を反映
     if (target.value.length <= maxLength) {
@@ -60,9 +63,9 @@ export const InputText: React.FC<InputTextProps> = ({
         value={inputText}
         onChange={handleChange}
       />
-      {error['title'] ? (
+      {errorMessage[name] ? (
         <div className={styles.error_area}>
-          <span className={styles.error_text}>{error['title']}</span>
+          <span className={styles.error_text}>{errorMessage[name]}</span>
         </div>
       ) : null}
     </div>

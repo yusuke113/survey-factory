@@ -87,20 +87,20 @@ export const InputTag: React.FC<InputTagProps> = ({ title, id, name, placeholder
           disabled={addTagListLength >= 3}
           onChange={handleInputChange}
         />
-        <div className={styles.tags}>
-          {addTagList.map((tag, key) => (
-            <span className={styles.tag} id={`tag_${tag.id}`} key={key}>
-              <span># {tag.name}</span>
-              <a
-                href="#"
-                className={styles.tag_remove}
-                title={`${tag.name}タグを削除`}
-                onClick={() => removeTag(tag.id)}
-              ></a>
-            </span>
-          ))}
-        </div>
       </form>
+      <div className={styles.tags}>
+        {addTagList.map((tag, key) => (
+          <span className={styles.tag} id={`tag_${tag.id}`} key={key}>
+            <span># {tag.name}</span>
+            <a
+              href="#"
+              className={styles.tag_remove}
+              title={`${tag.name}タグを削除`}
+              onClick={() => removeTag(tag.id)}
+            ></a>
+          </span>
+        ))}
+      </div>
     </div>
   );
 };
