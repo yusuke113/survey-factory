@@ -14,7 +14,7 @@ import { inputDescriptionLengthState } from '../../states/selectors/inputDescrip
 import { inputTitleLengthState } from '../../states/selectors/inputTitleLengthSelector';
 import styles from '../../styles/Home.module.scss';
 import form_styles from '../../styles/components/formParts/Form.module.scss';
-import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
+import { QuestionnaireUseCase } from '../../useCase/questionnaireUseCase';
 import { validation } from '../../utils/validation';
 import { errorMessageState } from '../../states/atoms/errorMessageAtom';
 import { addChoiceListState } from '../../states/atoms/addChoiceListAtom';

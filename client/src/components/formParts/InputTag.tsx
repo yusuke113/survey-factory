@@ -6,7 +6,7 @@ import { inputTagState } from '../../states/atoms/inputTagAtom';
 import { addTagListLengthState } from '../../states/selectors/addTagListLengthSelector';
 import { inputTagLengthState } from '../../states/selectors/inputTagLengthSelector';
 import styles from '../../styles/components/formParts/Form.module.scss';
-import { TagUseCase } from '../../usecase/tagUseCase';
+import { TagUseCase } from '../../useCase/tagUseCase';
 import { detectDuplicates } from '../../utils/arrayUtils';
 
 interface InputTagProps {

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.scss';
 import { Questionnaire } from '../domain/models/questionnaire';
 import { Pager } from '../domain/models/pager';
-import { QuestionnaireUseCase } from '../usecase/questionnaireUseCase';
+import { QuestionnaireUseCase } from '../useCase/questionnaireUseCase';
 
 type HomePage = {
   questionnaires: Questionnaire[];
