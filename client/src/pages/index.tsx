@@ -47,7 +47,10 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const useCase = new QuestionnaireUseCase();
-  const { data } = await useCase.getRankingList('vote', 1, 10);
+
+  // アンケート作成機能動作確認のため一時的に100個と作成順にアンケートを取得
+  // const { data } = await useCase.getRankingList('vote', 1, 10);
+  const { data } = await useCase.getRankingList('created_at', 1, 100);
 
   return {
     props: {

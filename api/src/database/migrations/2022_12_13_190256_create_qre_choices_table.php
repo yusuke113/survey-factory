@@ -21,7 +21,7 @@ return new class extends Migration
                   ->constrained()
                   ->index('idx_qre_choices_questionnaire_id')
                   ->comment('アンケートID');
-            $table->string('body')->comment('選択肢内容');
+            $table->string('body', 30)->comment('選択肢内容');
             $table->unsignedTinyInteger('display_order')->comment('選択肢順序');
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('作成日時');
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('更新日時');

@@ -14,5 +14,5 @@ final class Body
      *
      * @var int
      */
-    public const MAX_LENGTH = 255;
+    public const MAX_LENGTH = 30;
 }

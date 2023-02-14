@@ -168,3 +168,13 @@ h5 {
 .hidden {
   display: none !important;
 }
+
+/* フォーム
+----------------------------------------------------------------- */
+input[type='text'] {
+  &.validate-text {
+    &.error {
+      border: 1px solid #ff6767;
+    }
+  }
+}

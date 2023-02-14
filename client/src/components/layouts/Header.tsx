@@ -7,7 +7,7 @@ export const Header = () => {
       <div className={styles.header_inner}>
         <nav>
           <Link href="/" className={styles.header_nav_button}>アンケートを探す</Link>
-          <Link href="/" className={styles.header_nav_button}>アンケートを作る</Link>
+          <Link href="/questionnaires/create" className={styles.header_nav_button}>アンケートを作る</Link>
           <Link href="/" className={styles.header_nav_button}>ランキング</Link>
         </nav>
         <div className={styles.header_button_wrapper}>
