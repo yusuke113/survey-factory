@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { addChoiceListState } from '../../states/atoms/addChoiceListAtom';
 import { errorMessageState } from '../../states/atoms/errorMessageAtom';
 import styles from '../../styles/components/formParts/Form.module.scss';
 import { removeError } from '../../utils/validation';
@@ -20,8 +21,18 @@ export const InputChoice: React.FC<InputChoiceProps> = ({
   // 選択肢のテキストフィールドと文字数のstate
   const [inputChoice, setInputChoice] = useState('');
 
+  // 選択肢配列のstateのセッター関数
+  const addChoiceList = useRecoilValue(addChoiceListState);
+
   // エラーメッセージのstate
   const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState);
+
+  // submit後にテキストフィールドを空にする
+  useEffect(() => {
+    if (addChoiceList[index]['body'] === '') {
+      setInputChoice('');
+    }
+  }, [addChoiceList]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
@@ -29,7 +40,7 @@ export const InputChoice: React.FC<InputChoiceProps> = ({
 
     // 文字入力後エラーメッセージを外す
     removeError(target);
-    const removeErrorMessage = {...errorMessage};
+    const removeErrorMessage = { ...errorMessage };
     delete removeErrorMessage[`choice_${displayOrder}`];
     setErrorMessage(removeErrorMessage);
 

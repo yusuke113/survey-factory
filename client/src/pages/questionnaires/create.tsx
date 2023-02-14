@@ -17,6 +17,7 @@ import form_styles from '../../styles/components/formParts/Form.module.scss';
 import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
 import { validation } from '../../utils/validation';
 import { errorMessageState } from '../../states/atoms/errorMessageAtom';
+import { addChoiceListState } from '../../states/atoms/addChoiceListAtom';
 
 const questionnaireUseCase = new QuestionnaireUseCase();
 
@@ -32,7 +33,10 @@ const QuestionnaireCreatePage: NextPage = () => {
   const inputDescriptionLength = useRecoilValue(inputDescriptionLengthState);
 
   // 追加されたタグリストとそのリストに含まれるタグの個数
-  const addTagList = useRecoilValue(addTagListState);
+  const [addTagList, setAddTagList] = useRecoilState(addTagListState);
+
+  // 選択肢配列のstateのセッター関数
+  const setAddChoiceList = useSetRecoilState(addChoiceListState);
 
   // エラーメッセージを更新するセッター関数
   const setErrorMessage = useSetRecoilState(errorMessageState);
@@ -56,10 +60,14 @@ const QuestionnaireCreatePage: NextPage = () => {
     const { data } = await questionnaireUseCase.storeQuestionnaire(questionnaire);
     const message = data.message;
 
+    // RecoilのStateをリセットする
+    recoilStateReset();
+
     // TODO: マイページにリダイレクト
     alert(`${message}\nTODO: マイページの自分の作ったアンケート一覧にリダイレクトする予定`);
   };
 
+  // アンケートSubmit後、選択肢のオブジェクトを生成する
   const setChoices = (): Omit<QreChoice, 'id' | 'voteCount'>[] => {
     const choices = [...document.querySelectorAll('input[name^=choice]')] as HTMLInputElement[];
 
@@ -71,6 +79,24 @@ const QuestionnaireCreatePage: NextPage = () => {
     });
 
     return newList;
+  };
+
+  // アンケートSubmiｔ完了後、RecoilのStateをリセットする
+  const recoilStateReset = () => {
+    setInputTitle('');
+    setInputDescription('');
+    setAddTagList([]);
+    setAddChoiceList([
+      {
+        body: '',
+        displayOrder: 1,
+      },
+      {
+        body: '',
+        displayOrder: 2,
+      },
+    ]);
+    setErrorMessage({});
   };
 
   return (
