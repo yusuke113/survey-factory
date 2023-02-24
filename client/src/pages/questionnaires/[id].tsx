@@ -3,11 +3,11 @@ import styles from '../../styles/Home.module.scss';
 import { QreChoice } from '../../domain/models/qreChoice';
 import { Questionnaire } from '../../domain/models/questionnaire';
 import { Tag } from '../../domain/models/tag';
-import { QuestionnaireUseCase } from '../../usecase/questionnaireUseCase';
-import React, { useEffect, useRef, useState } from 'react';
+import { QuestionnaireUseCase } from '../../useCase/questionnaireUseCase';
+import React, { useState } from 'react';
 import { generateUserToken } from '../../utils/generateUserToken';
 import { getCookie, setCookie } from 'cookies-next';
-import { qreVoteUseCase } from '../../usecase/qreVoteUseCase';
+import { qreVoteUseCase } from '../../useCase/qreVoteUseCase';
 import { useRouter } from 'next/router';
 import Result from '../../components/questionnaires/Result';
 import BeforeResult from '../../components/questionnaires/BeforeResult';
@@ -32,13 +32,6 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
   // 投票済みかどうかフラグ
   const [isVoted, setIsVoted] = useState(false);
 
-  // 投票数
-  const [voteCount, setVoteCount] = useState(() => {
-    return qreChoices.map((qreChoice) => {
-      return qreChoice.voteCount;
-    });
-  });
-
   // 投票チェックボックス判定
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -56,7 +49,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
 
   // 投票ボタンChangeイベント
   const handleOptionChange = (e: any) => {
-    if (selectedOption === 'duplicate') {
+    if (isVoted) {
       return;
     }
     setSelectedOption(e.target.value);
@@ -67,31 +60,19 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
     e.preventDefault();
 
     // ラジオボタン未選択でのsubmit禁止
-    if (selectedOption === '' || selectedOption === 'duplicate') {
+    if (selectedOption === '' || isVoted) {
       return;
     }
 
-    const choiceIndex = qreChoices.findIndex(
-      (qreChoice) => qreChoice.id === Number(e.target.elements.choice.value)
-    );
+    const choiceIndex = [...e.target.elements.choice].findIndex((choice) => choice.checked);
 
-    qreChoices[choiceIndex].voteCount++;
+    qreChoices[choiceIndex]['voteCount']++;
     questionnaire.voteCountAll++;
-    setSelectedOption('duplicate');
 
-    let updateVoteCount = qreChoices.map((qreChoice) => {
-      return qreChoice.voteCount;
-    });
-
-    setVoteCount(updateVoteCount);
     setIsVoted(true);
 
     try {
-      const result = await useCase.postQreVote(
-        Number(id),
-        e.target.elements.choice.value,
-        getUserToken()
-      );
+      await useCase.postQreVote(Number(id), e.target.elements.choice.value, getUserToken());
     } catch (error: any) {
       console.error(error);
       return;
@@ -107,7 +88,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
             <p className={styles.questionnaire_description}>{questionnaire.description}</p>
             <div className={styles.tags}>
               <ul className={styles.tag_list}>
-                {tags.map((tag, key) => (
+                {tags.map((tag, key: number) => (
                   <li className={styles.tag} key={key}>
                     <a>{tag.name}</a>
                   </li>
@@ -116,21 +97,22 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
             </div>
             {
               isVoted
-                ? <Result voteCount={voteCount} questionnaire={questionnaire} />
+                ? <Result questionnaire={questionnaire} qreChoices={qreChoices} />
                 : <BeforeResult />
             }
             <div className={styles.choices}>
               <form id="choice_form" onSubmit={handleSubmit}>
-                {qreChoices.map((qreChoice, key) => (
+                {qreChoices.map((qreChoice, key: number) => (
                   <div className={styles.choice_row} key={key}>
-                    <label htmlFor={`choice_${qreChoice.id}`}>
+                    <label className={`${isVoted ? styles.voted : ''}`} htmlFor={`choice_${qreChoice.id}`}>
                       <input
                         type="radio"
                         name="choice"
                         id={`choice_${qreChoice.id}`}
                         value={qreChoice.id}
                         key={key}
-                        checked={selectedOption === `${qreChoice.id}`}
+                        checked={Number(selectedOption) === qreChoice.id}
+                        className={Number(selectedOption) === qreChoice.id ? styles.voted : ''}
                         onChange={handleOptionChange}
                       />
                       <span className={`${styles.outer} ${isVoted ? styles.voted : ''}`}></span>
@@ -147,7 +129,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
                   <input
                     type="submit"
                     value="投票する"
-                    disabled={selectedOption === '' || selectedOption === 'duplicate'}
+                    disabled={selectedOption === '' || isVoted}
                     className={styles.choice_button}
                   />
                 </div>
@@ -158,7 +140,7 @@ const QuestionnaireDetailPage: NextPage<QuestionnaireDetailPage> = ({
       </div>
     </>
   );
-};
+};554
 
 export default QuestionnaireDetailPage;
 

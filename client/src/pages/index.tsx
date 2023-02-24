@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.scss';
 import { Questionnaire } from '../domain/models/questionnaire';
 import { Pager } from '../domain/models/pager';
-import { QuestionnaireUseCase } from '../usecase/questionnaireUseCase';
+import { QuestionnaireUseCase } from '../useCase/questionnaireUseCase';
 
 type HomePage = {
   questionnaires: Questionnaire[];
@@ -22,7 +22,7 @@ const Home: NextPage<HomePage> = ({ questionnaires }) => {
           <h2 className={styles.heading_main}>ランキング</h2>
           <div className={styles.ranking}>
             <ul className={styles.ranking_list}>
-              {questionnaires.map((questionnaire, key) => (
+              {questionnaires.map((questionnaire, key: number) => (
                 <li key={key}>
                   <Link href={`/questionnaires/${questionnaire.id}`}>
                     <div className={styles.thumbnail}>
