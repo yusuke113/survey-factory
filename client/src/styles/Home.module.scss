@@ -1,5 +1,6 @@
 @use './common.scss';
 @use './variables.scss' as *;
+@use './mixin.scss' as *;
 
 /* main visual
 ----------------------------------------------------------------- */
@@ -52,6 +53,7 @@
           height: 140px;
         }
         p {
+          @include fontRound;
           font-size: 16px;
           font-weight: bold;
         }
@@ -59,6 +61,7 @@
       .detail {
         padding: 16px;
         .title {
+          @include fontRound;
           font-size: 14px;
           font-weight: bold;
           margin-bottom: 10px;
@@ -138,16 +141,16 @@
   /* 棒グラフ */
   .result {
     margin: 50px 0;
-    padding: 0 90px;
     @include mq(sm) {
-      padding: 0 70px;
+      margin: 60px 0 40px;
     }
     .result_bar {
       display: flex;
       justify-content: space-between;
-      width: 500px;
+      position: relative;
+      width: 600px;
       max-width: 100%;
-      height: 30px;
+      height: 35px;
       margin: 0 auto;
     }
     .result_num {
@@ -155,15 +158,25 @@
       align-items: center;
       position: relative;
       height: 100%;
-      .number {
+      .result_text {
+        @include fontRound;
         position: absolute;
+        bottom: 100%;
         z-index: 1;
-        font-size: 28px;
+        font-size: 16px;
         font-weight: 900;
         letter-spacing: -.06em;
         @include mq(sm) {
-          font-size: 26px;
+          font-size: 12px;
         }
+      }
+      .number {
+        @include fontRound;
+        position: absolute;
+        z-index: 1;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: -.06em;
         .percent {
           font-size: 12px;
           font-weight: 900;
@@ -174,29 +187,34 @@
     }
     .result_num:nth-of-type(1) {
       background: $vote_color-1;
-      .number {
-        right: 100%;
+      border-radius: 8px 0 0 8px;
+      .result_text {
+        left: 5px;
         color: $vote_color-1;
-        margin-right: 10px;
-        @include mq(sm) {
-          margin-right: 5px;
-        }
+      }
+      .number {
+        left: 5px;
+        color: #fff;
       }
     }
     .result_num:nth-of-type(2) {
       background: $vote_color-2;
-      .number {
-        left: 100%;
+      border-radius: 0 8px 8px 0;
+      .result_text {
+        right: 5px;
         color: $vote_color-2;
-        margin-left: 10px;
-        @include mq(sm) {
-          margin-left: 5px;
-        }
+      }
+      .number {
+        right: 5px;
+        color: #fff;
       }
     }
   }
-  /* 投票ボタン */
+  /* 投票選択肢 */
   .choices {
+    width: 600px;
+    max-width: 100%;
+    margin: auto;
     .choice_row {
       &:not(:first-child) {
         margin-top: 5px;
@@ -205,10 +223,10 @@
         display: block;
         position: relative;
         z-index: 1;
-        padding: 16px 8px;
+        padding: 16px 16px 16px 40px;
         cursor: pointer;
-        @include mq(sm) {
-          padding: 10px 12px;
+        &.voted {
+          padding: 8px 16px;
         }
       }
       input[type=radio] {
@@ -234,6 +252,9 @@
               height: 16px;
             }
           }
+        }
+        &.voted {
+          background: #e0fdfd;
         }
       }
       .outer {
@@ -265,41 +286,46 @@
         }
       }
       .choice_body {
-        padding: 0 0 0 32px;
+        @include fontRound;
+        font-size: 16px;
       }
       .choice_number_text {
+        @include fontRound;
         font-weight: bold;
         text-align: right;
         color: #1ca7a7;
         margin-top: 5px;
       }
     }
-    .choice_button_row {
-      margin-top: 20px;
-      padding-bottom: .3em;
+  }
+
+  /* 投票ボタン */
+  .choice_button_row {
+    margin-top: 20px;
+    padding-bottom: .3em;
+  }
+  .choice_button {
+    @include fontRound;
+    display: block;
+    width: 300px;
+    min-height: calc(50px - .3em);
+    background: $main_color;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 .3em 0 #83c6be;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+    &:hover {
+      transform: translateY(.3em);
+      box-shadow: none;
     }
-    .choice_button {
-      display: block;
-      width: 300px;
-      min-height: calc(50px - .3em);
-      background: $main_color;
-      border: 0;
-      border-radius: 8px;
-      box-shadow: 0 .3em 0 #83c6be;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      margin: 0 auto;
-      &:hover {
-        transform: translateY(.3em);
-        box-shadow: none;
-      }
-      &:disabled {
-        transform: translateY(.3em);
-        background: #dadada;
-        box-shadow: none;
-      }
+    &:disabled {
+      transform: translateY(.3em);
+      background: #dadada;
+      box-shadow: none;
     }
   }
 }

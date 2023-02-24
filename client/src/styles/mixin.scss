@@ -1,0 +1,7 @@
+@use './variables.scss' as *;
+
+//フォント 丸ゴ
+@mixin fontRound {
+  font-family: $round_font-family;
+  transform: rotateZ(0.03deg);//Windowsでのフォント崩れ対策
+}

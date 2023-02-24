@@ -1,9 +1,6 @@
 /* カラー
 ----------------------------------------------------------------- */
 $main_color: #95DFD6;
-// $main_color: #CDF0EA;候補2
-// $main_color: #abe9e1;候補3
-// $accent_color: #EAA8BF;
 $vote_color-1: #ECACB5;
 $vote_color-2: #99CFE5;
 $tag_color: #3B5998;
@@ -23,7 +20,7 @@ $box_shadow_common: 0 2px 8px #5e5d406b;
 /* base font
 ----------------------------------------------------------------- */
 $base_font-family: 'Noto Sans JP', sans-serif;
-$base_font-family-round: 'M PLUS Rounded 1c', sans-serif;
+$round_font-family: 'M PLUS Rounded 1c', sans-serif;
 
 // Web Fonts
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap');

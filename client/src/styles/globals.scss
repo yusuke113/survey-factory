@@ -1,4 +1,5 @@
 @use './variables.scss' as *;
+@use './mixin.scss' as *;
 
 /* Reset
 ----------------------------------------------------------------- */
@@ -19,7 +20,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: $base_font-family-round;
+  font-family: $base_font-family;
   font-size: 14px;
   line-height: 1.5;
   color: $base_text_color;
@@ -45,6 +46,7 @@ h3,
 h4,
 h5,
 h6 {
+  @include fontRound;
   font-weight: bold;
   margin: 0;
 }
