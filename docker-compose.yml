@@ -43,7 +43,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/db/Dockerfile
-    platform: linux/amd64 # M1チップの場合はコメントアウトを外す
+    # platform: linux/amd64 # M1チップの場合はコメントアウトを外す
     ports:
       - 3306:3306
     environment:

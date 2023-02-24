@@ -68,7 +68,7 @@ remake:
 	@make up
 
 create-network:
-	@docker network create survey-factory_net
+	-@docker network create survey-factory_net
 
 ps:
 	docker ps -a
